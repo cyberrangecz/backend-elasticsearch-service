@@ -1,1 +1,1 @@
-1.0.4  Gitlab CI integration testing vol 3.
+1.0.5  Gitlab CI integration testing vol 4.
