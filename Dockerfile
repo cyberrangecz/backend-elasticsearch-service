@@ -23,4 +23,4 @@ RUN cd /app && \
 
 WORKDIR /app
 EXPOSE 8085
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/app/supervisord.conf"]
+ENTRYPOINT ["java", "-Dspring.config.location=/app/etc/kypo-elasticsearch-service.properties", "-jar",  "/app/kypo-elasticsearch-service.jar"]
