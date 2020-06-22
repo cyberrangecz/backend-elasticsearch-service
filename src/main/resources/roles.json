@@ -1,0 +1,22 @@
+[
+  {
+    "role_type": "ROLE_ELASTICSEARCH_SERVICE_ADMINISTRATOR",
+    "default": false,
+    "description": "This role will allow you to do every operation in KYPO Elasticsearch Service."
+  },
+  {
+    "role_type": "ROLE_ELASTICSEARCH_SERVICE_DESIGNER",
+    "default": false,
+    "description": "This role will allow you to do ... in KYPO Elasticsearch Service."
+  },
+  {
+    "role_type": "ROLE_ELASTICSEARCH_SERVICE_ORGANIZER",
+    "default": false,
+    "description": "This role will allow you to do ...  KYPO Elasticsearch Service."
+  },
+  {
+    "role_type": "ROLE_ELASTICSEARCH_SERVICE_TRAINEE",
+    "default": true,
+    "description": "This role will allow you to do ...  KYPO Elasticsearch Service."
+  }
+]
