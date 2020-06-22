@@ -1,1 +1,1 @@
-1.0.0  Initial design of Elasticsearch service for post-processing analyses.
+1.0.1  Gitlab CI integration test.
