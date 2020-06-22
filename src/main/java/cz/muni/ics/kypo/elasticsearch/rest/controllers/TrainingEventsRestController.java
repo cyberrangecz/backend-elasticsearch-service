@@ -126,4 +126,30 @@ public class TrainingEventsRestController {
         }
     }
 
+    /**
+     * Delete all events in particular Training Instance.
+     *
+     * @param trainingInstanceId id of wanted instance
+     * @return Confirmation that the request process is ok.
+     */
+    @ApiOperation(httpMethod = "DELETE",
+            value = "Delete all events in particular training instance.",
+            nickname = "deleteEventsFromTrainingInstance"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "All events in particular training instance by id was were deleted."),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @DeleteMapping(path = "/training-instances/{instanceId}")
+    public ResponseEntity<Void> deleteEventsFromTrainingInstance(
+            @ApiParam(value = "Training instance ID", required = true)
+            @PathVariable("instanceId") Long trainingInstanceId) {
+        try {
+            trainingEventsService.deleteEventsByTrainingInstanceId(trainingInstanceId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ElasticsearchTrainingServiceLayerException ex) {
+            throw new ResourceNotModifiedException(ex);
+        }
+    }
+
 }
