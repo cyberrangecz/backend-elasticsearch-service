@@ -16,22 +16,19 @@
 
     <properties>
         <java.version>11</java.version>
-
         <!-- spring for swagger version -->
         <swagger.version>2.9.2</swagger.version>
         <swagger-annotations.version>1.5.22</swagger-annotations.version>
         <!-- lombok -->
         <lombok.version>1.18.12</lombok.version>
         <org.mapstruct.version>1.3.0.Final</org.mapstruct.version>
-
         <!-- spring for swagger version -->
         <swagger.version>2.9.2</swagger.version>
         <swagger-annotations.version>1.5.22</swagger-annotations.version>
-
         <!-- javax validation -->
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <spring-cloud-starter-oauth2.version>2.0.1.RELEASE</spring-cloud-starter-oauth2.version>
-
+        <!-- path to proprietary repository -->
         <proprietary-repo-id>kypo-nexus</proprietary-repo-id>
     </properties>
 
