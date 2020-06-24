@@ -29,8 +29,7 @@ createTag:
   - git config --global user.name "$GIT_USER_NAME"
   - git remote set-url origin "$GIT_CLONE_URL"
   - git fetch
-  - git branch -D master
-  - git checkout --track origin/master  
+  - git master
   script:
   - export VERSION=$(grep -oP '^([^\s]*)' $DEPLOYMENT_INFO_VERSION_FILE)
   - export TAG_MESSAGE=$(grep -oP '(?<=\s)[^\s].*' $DEPLOYMENT_INFO_VERSION_FILE)
