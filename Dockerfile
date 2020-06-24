@@ -1,8 +1,6 @@
 FROM maven:3.6.2-jdk-11-slim AS build
 
 ## default environment variables for database settings
-ARG USERNAME=postgres
-ARG PASSWORD=postgres
 ARG PROJECT_ARTIFACT_ID=kypo-elasticsearch-service
 
 ## default link to proprietary repository, e.g., Nexus repository
