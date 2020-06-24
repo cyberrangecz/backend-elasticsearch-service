@@ -1,1 +1,1 @@
-1.0.9  Gitlab CI integration testing vol 7.
+1.0.10  Gitlab CI integration testing vol 7.
