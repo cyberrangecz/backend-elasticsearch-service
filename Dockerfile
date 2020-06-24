@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y rsyslog
 # copy only essential parts
 COPY /etc/kypo-elasticsearch-service.properties /app/etc/kypo-elasticsearch-service.properties
 COPY pom.xml /app/pom.xml
-COPY kypo-elasticsearch-service/src /app/kypo-elasticsearch-service/src
+COPY /src /app/src
 
 # build elasticsearch service
 RUN cd /app && \
