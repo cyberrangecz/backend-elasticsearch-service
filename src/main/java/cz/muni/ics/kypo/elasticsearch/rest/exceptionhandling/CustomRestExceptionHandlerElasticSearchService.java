@@ -2,6 +2,7 @@ package cz.muni.ics.kypo.elasticsearch.rest.exceptionhandling;
 
 
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.MicroserviceApiException;
+import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotFoundException;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiEntityError;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiError;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiMicroserviceError;
@@ -150,6 +151,16 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
     public ResponseEntity<Object> handleSpringAccessDeniedException(org.springframework.security.access.AccessDeniedException ex, WebRequest request, HttpServletRequest req) {
         final ApiError apiError = ApiError.of(
                 HttpStatus.FORBIDDEN,
+                getInitialException(ex).getLocalizedMessage(),
+                getFullStackTrace(ex),
+                URL_PATH_HELPER.getRequestUri(req));
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<Object> handleResourceNotFoundExceptionException(ResourceNotFoundException ex, WebRequest request, HttpServletRequest req) {
+        final ApiError apiError = ApiError.of(
+                HttpStatus.NOT_FOUND,
                 getInitialException(ex).getLocalizedMessage(),
                 getFullStackTrace(ex),
                 URL_PATH_HELPER.getRequestUri(req));
