@@ -140,9 +140,6 @@ public class TrainingEventsDAO extends AbstractElasticClientDAO {
                     Map<String, Object> source = hit.getSourceAsMap();
                     events.add(source);
                 }
-                if (events.isEmpty()) {
-                    throw new ResourceNotFoundException("There are no events in this game.");
-                }
             }
         } else {
             throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic. Please, restart Elasticsearch service.");
