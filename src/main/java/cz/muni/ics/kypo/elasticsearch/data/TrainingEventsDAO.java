@@ -1,6 +1,7 @@
 package cz.muni.ics.kypo.elasticsearch.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotFoundException;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElasticTermQueryFields;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoIndexPath;
@@ -140,7 +141,7 @@ public class TrainingEventsDAO extends AbstractElasticClientDAO {
                     events.add(source);
                 }
                 if (events.isEmpty()) {
-                    throw new ElasticsearchTrainingDataLayerException("There are no events in this game.");
+                    throw new ResourceNotFoundException("There are no events in this game.");
                 }
             }
         } else {
