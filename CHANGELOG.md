@@ -1,3 +1,11 @@
+* 8d9636a -- Updated Swagger documentation generated.
+* 555b38e -- Update pom.xml version based on GitLab tag. Done by CI.
+* 0883921 -- Update VERSION.txt
+*   cd9c542 -- Merge branch '11-rename-bash-commands-to-console-commands-to-be-universal' into 'master'
+|\  
+| * 5fad4c1 -- rename methods and classes for console commands.
+|/  
+* fc81be9 -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * 573b2f4 -- Updated Swagger documentation generated.
 * f498b8b -- Update pom.xml version based on GitLab tag. Done by CI.
 * 941cb9e -- Update VERSION.txt
