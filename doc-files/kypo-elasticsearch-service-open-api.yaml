@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 1.0.14"
+  version: "Version: 1.0.15"
   title: "KYPO2 Eleasticsearch Service - API Reference"
 host: "localhost:8080"
 basePath: "/kypo-elasticsearch-service/api/v1"
@@ -11,7 +11,101 @@ schemes:
 - "http"
 - "https"
 paths:
-  /training-events/training-definitions/{definitionId}/training-instances/{instanceId}:
+  /training-platform-commands/pools/{poolId}:
+    get:
+      tags:
+      - "Training events"
+      summary: "Get all commands in particular pool."
+      description: ""
+      operationId: "findAllBashCommandsByPoolId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "poolId"
+        in: "path"
+        description: "Training pool ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All commands in particular pool were found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+    delete:
+      tags:
+      - "Training events"
+      summary: "Delete all commands in particular pool."
+      description: ""
+      operationId: "deleteBashCommandsByPoolId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "poolId"
+        in: "path"
+        description: "Training pool ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All events in particular training sandbox by id were deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /training-platform-commands/sandboxes/{sandboxId}:
+    get:
+      tags:
+      - "Training events"
+      summary: "Get all commands in particular sandbox."
+      description: ""
+      operationId: "findAllBashCommandsBySandboxId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sandboxId"
+        in: "path"
+        description: "Training sandbox ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All commands in particular sandbox were found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+    delete:
+      tags:
+      - "Training events"
+      summary: "Delete all commands in particular pool."
+      description: ""
+      operationId: "deleteBashCommandsByPoolId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sandboxId"
+        in: "path"
+        description: "Training sandbox ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All commands in particular sandbox by id were deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+  /training-platform-events/training-definitions/{definitionId}/training-instances/{instanceId}:
     get:
       tags:
       - "Training events"
@@ -42,7 +136,7 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /training-events/training-definitions/{definitionId}/training-instances/{instanceId}/training-runs/{runId}:
+  /training-platform-events/training-definitions/{definitionId}/training-instances/{instanceId}/training-runs/{runId}:
     get:
       tags:
       - "Training events"
@@ -79,7 +173,7 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /training-events/training-instances/{instanceId}:
+  /training-platform-events/training-instances/{instanceId}:
     delete:
       tags:
       - "Training events"
@@ -103,7 +197,7 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
-  /training-events/training-instances/{instanceId}/training-runs/{runId}:
+  /training-platform-events/training-instances/{instanceId}/training-runs/{runId}:
     delete:
       tags:
       - "Training events"
