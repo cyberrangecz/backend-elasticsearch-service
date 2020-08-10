@@ -1,6 +1,6 @@
 package cz.muni.ics.kypo.elasticsearch.service;
 
-import cz.muni.ics.kypo.elasticsearch.data.TrainingBashCommandsDao;
+import cz.muni.ics.kypo.elasticsearch.data.TrainingConsoleCommandsDao;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,42 +14,42 @@ import java.util.Map;
  * The type Training bash commands service.
  */
 @Service
-public class TrainingBashCommandsService {
+public class TrainingConsoleCommandsService {
 
-    private TrainingBashCommandsDao trainingBashCommandsDao;
+    private TrainingConsoleCommandsDao trainingConsoleCommandsDao;
 
     @Autowired
-    public TrainingBashCommandsService(TrainingBashCommandsDao trainingBashCommandsDao) {
-        this.trainingBashCommandsDao = trainingBashCommandsDao;
+    public TrainingConsoleCommandsService(TrainingConsoleCommandsDao trainingConsoleCommandsDao) {
+        this.trainingConsoleCommandsDao = trainingConsoleCommandsDao;
     }
 
-    public List<Map<String, Object>> findAllBashCommandsByPoolId(Long poolId) {
+    public List<Map<String, Object>> findAllConsoleCommandsByPoolId(Long poolId) {
         try {
-            return trainingBashCommandsDao.findAllBashCommandsByPoolId(poolId);
+            return trainingConsoleCommandsDao.findAllConsoleCommandsByPoolId(poolId);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public List<Map<String, Object>> findAllBashCommandsBySandboxId(Long sandboxId) {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxId(Long sandboxId) {
         try {
-            return trainingBashCommandsDao.findAllBashCommandsBySandboxId(sandboxId);
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxId(sandboxId);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public void deleteBashCommandsByPoolId(Long poolId) {
+    public void deleteConsoleCommandsByPoolId(Long poolId) {
         try {
-            trainingBashCommandsDao.deleteBashCommandsByPoolId(poolId);
+            trainingConsoleCommandsDao.deleteConsoleCommandsByPoolId(poolId);
         } catch (ElasticsearchTrainingDataLayerException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public void deleteBashCommandsBySandboxId(Long sandboxId) {
+    public void deleteConsoleCommandsBySandboxId(Long sandboxId) {
         try {
-            trainingBashCommandsDao.deleteBashCommandsBySandboxId(sandboxId);
+            trainingConsoleCommandsDao.deleteConsoleCommandsBySandboxId(sandboxId);
         } catch (ElasticsearchTrainingDataLayerException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
