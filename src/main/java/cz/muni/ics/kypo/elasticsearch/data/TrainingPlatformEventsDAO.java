@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * The type Training events dao.
  */
 @Repository
-public class TrainingEventsDAO extends AbstractElasticClientDAO {
+public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
     private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 10_000;
 
@@ -42,8 +42,8 @@ public class TrainingEventsDAO extends AbstractElasticClientDAO {
      * @param objectMapper        the object mapper
      */
     @Autowired
-    public TrainingEventsDAO(@Qualifier("kypoRestHighLevelClient") RestHighLevelClient restHighLevelClient,
-                             @Qualifier("objMapperForElasticsearch") ObjectMapper objectMapper) {
+    public TrainingPlatformEventsDAO(@Qualifier("kypoRestHighLevelClient") RestHighLevelClient restHighLevelClient,
+                                     @Qualifier("objMapperForElasticsearch") ObjectMapper objectMapper) {
         super(restHighLevelClient, objectMapper);
     }
 

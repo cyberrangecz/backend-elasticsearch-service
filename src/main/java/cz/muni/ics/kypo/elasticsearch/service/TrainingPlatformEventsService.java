@@ -1,6 +1,6 @@
 package cz.muni.ics.kypo.elasticsearch.service;
 
-import cz.muni.ics.kypo.elasticsearch.data.TrainingEventsDAO;
+import cz.muni.ics.kypo.elasticsearch.data.TrainingPlatformEventsDAO;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +15,18 @@ import java.util.Map;
  * The type Training events service.
  */
 @Service
-public class TrainingEventsService {
+public class TrainingPlatformEventsService {
 
-    private TrainingEventsDAO trainingEventsDAO;
+    private TrainingPlatformEventsDAO trainingPlatformEventsDAO;
 
     /**
      * Instantiates a new Training events service.
      *
-     * @param trainingEventsDAO the training events dao
+     * @param trainingPlatformEventsDAO the training events dao
      */
     @Autowired
-    public TrainingEventsService(TrainingEventsDAO trainingEventsDAO) {
-        this.trainingEventsDAO = trainingEventsDAO;
+    public TrainingPlatformEventsService(TrainingPlatformEventsDAO trainingPlatformEventsDAO) {
+        this.trainingPlatformEventsDAO = trainingPlatformEventsDAO;
     }
 
     /**
@@ -39,8 +39,7 @@ public class TrainingEventsService {
      */
     public List<Map<String, Object>> findAllEventsByTrainingDefinitionAndTrainingInstanceId(Long trainingDefinitionId, Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
         try {
-            List<Map<String, Object>> eventsFromElasticsearch = trainingEventsDAO.findAllEventsByTrainingDefinitionAndTrainingInstanceId(trainingDefinitionId, trainingInstanceId);
-            Collections.sort(eventsFromElasticsearch, (map1, map2) -> Long.valueOf(map1.get("timestamp").toString()).compareTo(Long.valueOf(map2.get("timestamp").toString())));
+            List<Map<String, Object>> eventsFromElasticsearch = trainingPlatformEventsDAO.findAllEventsByTrainingDefinitionAndTrainingInstanceId(trainingDefinitionId, trainingInstanceId);
             Collections.sort(eventsFromElasticsearch, (map1, map2) -> Long.valueOf(map1.get("timestamp").toString()).compareTo(Long.valueOf(map2.get("timestamp").toString())));
             return eventsFromElasticsearch;
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
@@ -59,7 +58,7 @@ public class TrainingEventsService {
      */
     public List<Map<String, Object>> findAllEventsFromTrainingRun(Long trainingDefinitionId, Long trainingInstanceId, Long trainingRunId) throws ElasticsearchTrainingServiceLayerException {
         try {
-            List<Map<String, Object>> eventsFromElasticsearch = trainingEventsDAO.findAllEventsFromTrainingRun(trainingDefinitionId, trainingInstanceId, trainingRunId);
+            List<Map<String, Object>> eventsFromElasticsearch = trainingPlatformEventsDAO.findAllEventsFromTrainingRun(trainingDefinitionId, trainingInstanceId, trainingRunId);
             Collections.sort(eventsFromElasticsearch, (map1, map2) -> Long.valueOf(map1.get("timestamp").toString()).compareTo(Long.valueOf(map2.get("timestamp").toString())));
             return eventsFromElasticsearch;
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
@@ -75,7 +74,7 @@ public class TrainingEventsService {
      */
     public void deleteEventsByTrainingInstanceId(Long instanceId) throws ElasticsearchTrainingServiceLayerException {
         try {
-            trainingEventsDAO.deleteEventsByTrainingInstanceId(instanceId);
+            trainingPlatformEventsDAO.deleteEventsByTrainingInstanceId(instanceId);
         } catch (ElasticsearchTrainingDataLayerException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
@@ -90,7 +89,7 @@ public class TrainingEventsService {
      */
     public void deleteEventsFromTrainingRun(Long trainingInstanceId, Long trainingRunId) throws ElasticsearchTrainingServiceLayerException {
         try {
-            trainingEventsDAO.deleteEventsFromTrainingRun(trainingInstanceId, trainingRunId);
+            trainingPlatformEventsDAO.deleteEventsFromTrainingRun(trainingInstanceId, trainingRunId);
         } catch (ElasticsearchTrainingDataLayerException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
