@@ -3,7 +3,7 @@ package cz.muni.ics.kypo.elasticsearch.rest.controllers;
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotFoundException;
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotModifiedException;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiError;
-import cz.muni.ics.kypo.elasticsearch.service.TrainingEventsService;
+import cz.muni.ics.kypo.elasticsearch.service.TrainingPlatformEventsService;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +13,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * The rest controller for Training events.
+ * The rest controller for Training platform events.
  */
-@Api(value = "/training-events", tags = "Training events", consumes = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "/training-platform-events", tags = "Training events", consumes = MediaType.APPLICATION_JSON_VALUE)
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Full authentication is required to access this resource.", response = ApiError.class),
         @ApiResponse(code = 403, message = "The necessary permissions are required for a resource.", response = ApiError.class)
 })
 @RestController
-@RequestMapping(path = "/training-events", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TrainingEventsRestController {
+@RequestMapping(path = "/training-platform-events", produces = MediaType.APPLICATION_JSON_VALUE)
+public class TrainingPlatformEventsRestController {
 
-    private TrainingEventsService trainingEventsService;
+    private TrainingPlatformEventsService trainingEventsService;
 
     /**
      * Instantiates a new Training events rest controller.
      *
-     * @param trainingEventsService the training events service
+     * @param trainingPlatformEventsService the training events service
      */
     @Autowired
-    public TrainingEventsRestController(TrainingEventsService trainingEventsService) {
-        this.trainingEventsService = trainingEventsService;
+    public TrainingPlatformEventsRestController(TrainingPlatformEventsService trainingPlatformEventsService) {
+        this.trainingEventsService = trainingPlatformEventsService;
     }
 
     /**
