@@ -1,1 +1,1 @@
-1.0.14  Automatic generation of Open Api based on swagger.
+1.0.15  Automatic generation of Open Api based on swagger.
