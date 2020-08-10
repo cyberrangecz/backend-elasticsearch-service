@@ -1,3 +1,12 @@
+* 573b2f4 -- Updated Swagger documentation generated.
+* f498b8b -- Update pom.xml version based on GitLab tag. Done by CI.
+* 941cb9e -- Update VERSION.txt
+*   ae9d5d2 -- Merge branch '10-add-rest-resource-to-retrieve-elasticsearch-commands' into 'master'
+|\  
+| * 63c842f -- Resolve "Add REST Resource to Retrieve Elasticsearch Commands"
+|/  
+* 8ab6814 -- Update .gitlab-ci.yml
+* b2d512d -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * 22a6eb7 -- Updated Swagger documentation generated.
 * f5f025b -- Update pom.xml version based on GitLab tag. Done by CI.
 * e24bbc4 -- Update VERSION.txt
