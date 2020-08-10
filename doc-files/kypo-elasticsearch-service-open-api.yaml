@@ -17,7 +17,7 @@ paths:
       - "Training events"
       summary: "Get all commands in particular pool."
       description: ""
-      operationId: "findAllBashCommandsByPoolId"
+      operationId: "findAllConsoleCommandsByPoolId"
       produces:
       - "application/json"
       parameters:
@@ -41,7 +41,7 @@ paths:
       - "Training events"
       summary: "Delete all commands in particular pool."
       description: ""
-      operationId: "deleteBashCommandsByPoolId"
+      operationId: "deleteConsoleCommandsByPoolId"
       produces:
       - "application/json"
       parameters:
@@ -64,7 +64,7 @@ paths:
       - "Training events"
       summary: "Get all commands in particular sandbox."
       description: ""
-      operationId: "findAllBashCommandsBySandboxId"
+      operationId: "findAllConsoleCommandsBySandboxId"
       produces:
       - "application/json"
       parameters:
@@ -88,7 +88,7 @@ paths:
       - "Training events"
       summary: "Delete all commands in particular pool."
       description: ""
-      operationId: "deleteBashCommandsByPoolId"
+      operationId: "deleteConsoleCommandsByPoolId"
       produces:
       - "application/json"
       parameters:

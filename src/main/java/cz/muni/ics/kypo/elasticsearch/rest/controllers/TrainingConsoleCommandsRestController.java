@@ -3,7 +3,7 @@ package cz.muni.ics.kypo.elasticsearch.rest.controllers;
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotFoundException;
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotModifiedException;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiError;
-import cz.muni.ics.kypo.elasticsearch.service.TrainingBashCommandsService;
+import cz.muni.ics.kypo.elasticsearch.service.TrainingConsoleCommandsService;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
 })
 @RestController
 @RequestMapping(path = "/training-platform-commands", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TrainingBashCommandsRestController {
+public class TrainingConsoleCommandsRestController {
 
-    private TrainingBashCommandsService trainingBashCommandsService;
+    private TrainingConsoleCommandsService trainingConsoleCommandsService;
 
     @Autowired
-    public TrainingBashCommandsRestController(TrainingBashCommandsService trainingBashCommandsService) {
-        this.trainingBashCommandsService = trainingBashCommandsService;
+    public TrainingConsoleCommandsRestController(TrainingConsoleCommandsService trainingConsoleCommandsService) {
+        this.trainingConsoleCommandsService = trainingConsoleCommandsService;
     }
 
     /**
@@ -36,7 +36,7 @@ public class TrainingBashCommandsRestController {
      */
     @ApiOperation(httpMethod = "GET",
             value = "Get all commands in particular pool.",
-            nickname = "findAllBashCommandsByPoolId",
+            nickname = "findAllConsoleCommandsByPoolId",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiResponses(value = {
@@ -44,11 +44,11 @@ public class TrainingBashCommandsRestController {
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @GetMapping(path = "/pools/{poolId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findAllBashCommandsByPoolId(
+    public ResponseEntity<Object> findAllConsoleCommandsByPoolId(
             @ApiParam(value = "Training pool ID", required = true)
             @PathVariable("poolId") Long poolId) {
         try {
-            return ResponseEntity.ok(trainingBashCommandsService.findAllBashCommandsByPoolId(poolId));
+            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByPoolId(poolId));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
@@ -62,7 +62,7 @@ public class TrainingBashCommandsRestController {
      */
     @ApiOperation(httpMethod = "GET",
             value = "Get all commands in particular sandbox.",
-            nickname = "findAllBashCommandsBySandboxId",
+            nickname = "findAllConsoleCommandsBySandboxId",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiResponses(value = {
@@ -70,11 +70,11 @@ public class TrainingBashCommandsRestController {
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @GetMapping(path = "/sandboxes/{sandboxId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findAllBashCommandsBySandboxId(
+    public ResponseEntity<Object> findAllConsoleCommandsBySandboxId(
             @ApiParam(value = "Training sandbox ID", required = true)
             @PathVariable("sandboxId") Long sandboxId) {
         try {
-            return ResponseEntity.ok(trainingBashCommandsService.findAllBashCommandsBySandboxId(sandboxId));
+            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxId(sandboxId));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
@@ -88,18 +88,18 @@ public class TrainingBashCommandsRestController {
      */
     @ApiOperation(httpMethod = "DELETE",
             value = "Delete all commands in particular pool.",
-            nickname = "deleteBashCommandsByPoolId"
+            nickname = "deleteConsoleCommandsByPoolId"
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "All events in particular training sandbox by id were deleted."),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @DeleteMapping(path = "/pools/{poolId}")
-    public ResponseEntity<Void> deleteBashCommandsByPoolId(
+    public ResponseEntity<Void> deleteConsoleCommandsByPoolId(
             @ApiParam(value = "Training pool ID", required = true)
             @PathVariable("poolId") Long poolId) {
         try {
-            trainingBashCommandsService.deleteBashCommandsByPoolId(poolId);
+            trainingConsoleCommandsService.deleteConsoleCommandsByPoolId(poolId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotModifiedException(ex);
@@ -114,18 +114,18 @@ public class TrainingBashCommandsRestController {
      */
     @ApiOperation(httpMethod = "DELETE",
             value = "Delete all commands in particular pool.",
-            nickname = "deleteBashCommandsByPoolId"
+            nickname = "deleteConsoleCommandsByPoolId"
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "All commands in particular sandbox by id were deleted."),
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @DeleteMapping(path = "/sandboxes/{sandboxId}")
-    public ResponseEntity<Void> deleteBashCommandsBySandboxId(
+    public ResponseEntity<Void> deleteConsoleCommandsBySandboxId(
             @ApiParam(value = "Training sandbox ID", required = true)
             @PathVariable("sandboxId") Long sandboxId) {
         try {
-            trainingBashCommandsService.deleteBashCommandsBySandboxId(sandboxId);
+            trainingConsoleCommandsService.deleteConsoleCommandsBySandboxId(sandboxId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotModifiedException(ex);

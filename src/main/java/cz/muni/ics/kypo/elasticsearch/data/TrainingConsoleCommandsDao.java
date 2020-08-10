@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Repository
-public class TrainingBashCommandsDao extends AbstractElasticClientDAO {
+public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
 
     private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 10_000;
 
@@ -39,8 +39,8 @@ public class TrainingBashCommandsDao extends AbstractElasticClientDAO {
      * @param objectMapper        the object mapper
      */
     @Autowired
-    public TrainingBashCommandsDao(@Qualifier("kypoRestHighLevelClient") RestHighLevelClient restHighLevelClient,
-                                   @Qualifier("objMapperForElasticsearch") ObjectMapper objectMapper) {
+    public TrainingConsoleCommandsDao(@Qualifier("kypoRestHighLevelClient") RestHighLevelClient restHighLevelClient,
+                                      @Qualifier("objMapperForElasticsearch") ObjectMapper objectMapper) {
         super(restHighLevelClient, objectMapper);
     }
 
@@ -52,7 +52,7 @@ public class TrainingBashCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllBashCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_POOL_ID, poolId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
@@ -74,7 +74,7 @@ public class TrainingBashCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllBashCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_SANDBOX_ID, sandboxId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
@@ -91,7 +91,7 @@ public class TrainingBashCommandsDao extends AbstractElasticClientDAO {
      * @param poolId the pool id
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
-    public void deleteBashCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException {
+    public void deleteConsoleCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_BASH_COMMANDS_INDEX + "*" + ".pool=" + poolId + "*");
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
@@ -107,7 +107,7 @@ public class TrainingBashCommandsDao extends AbstractElasticClientDAO {
      * @param sandboxId the sandbox id
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
-    public void deleteBashCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException {
+    public void deleteConsoleCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_BASH_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId + "*");
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
