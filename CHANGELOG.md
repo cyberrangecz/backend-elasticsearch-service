@@ -1,3 +1,11 @@
+* f3493fc -- Updated Swagger documentation generated.
+* 5b57f48 -- Update pom.xml version based on GitLab tag. Done by CI.
+* 43adb71 -- Update VERSION.txt
+*   f700a51 -- Merge branch '12-rename-index-for-retriving-console-commands' into 'master'
+|\  
+| * 43af81e -- rename es index for retrievement.
+|/  
+* 934f393 -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * 8d9636a -- Updated Swagger documentation generated.
 * 555b38e -- Update pom.xml version based on GitLab tag. Done by CI.
 * 0883921 -- Update VERSION.txt
