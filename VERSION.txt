@@ -1,1 +1,1 @@
-1.0.16  REST resources for kypo console logs added.
+1.0.17  Elasticsearch index for ES documents (console commands) changed.
