@@ -1,1 +1,1 @@
-1.0.17  Elasticsearch index for ES documents (console commands) changed.
+1.0.18  Anonymize the developer information in the source code.
