@@ -1,3 +1,9 @@
+* aaf0ff0 -- Updated Swagger documentation generated.
+* fbc5047 -- Update pom.xml version based on GitLab tag. Done by CI.
+* 10ecfe7 -- Update VERSION.txt -- Anonymize the developer information in the source code.
+* 5fa9ef6 -- update security-commons dependency
+* f03d7aa -- Add README.md
+* 504c926 -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * f3493fc -- Updated Swagger documentation generated.
 * 5b57f48 -- Update pom.xml version based on GitLab tag. Done by CI.
 * 43adb71 -- Update VERSION.txt
