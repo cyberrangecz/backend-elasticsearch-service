@@ -39,6 +39,14 @@ public class TrainingConsoleCommandsService {
         }
     }
 
+    public List<List<Map<String, Object>>> findAllConsoleCommandsBySandboxIdAggregatedByTimeRanges(Long sandboxId, List<String> ranges) {
+        try {
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxIdAggregatedByTimeRanges(sandboxId, ranges);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
     public void deleteConsoleCommandsByPoolId(Long poolId) {
         try {
             trainingConsoleCommandsDao.deleteConsoleCommandsByPoolId(poolId);
