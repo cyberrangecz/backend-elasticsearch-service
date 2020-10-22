@@ -62,7 +62,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + "*");
+        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -84,7 +84,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId + "*");
+        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -116,7 +116,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         dateRangeAggregationBuilder.subAggregation(AggregationBuilders.topHits("by_top_hits").sort("timestamp_str").size(100));
         searchSourceBuilder.aggregation(dateRangeAggregationBuilder);
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId + "*");
+        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
@@ -128,7 +128,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
     public void deleteConsoleCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException {
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + "*");
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
             if (!deleteIndexResponse.isAcknowledged()) {
@@ -144,7 +144,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
     public void deleteConsoleCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException {
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId + "*");
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
             if (!deleteIndexResponse.isAcknowledged()) {
