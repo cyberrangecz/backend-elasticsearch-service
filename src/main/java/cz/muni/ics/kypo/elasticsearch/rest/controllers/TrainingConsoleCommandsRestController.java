@@ -86,6 +86,8 @@ public class TrainingConsoleCommandsRestController {
      * Get all commands in particular sandbox aggregated by timestamp ranges.
      *
      * @param sandboxId id of wanted sandbox
+     * @param from the lower bound of the time range
+     * @param to the upper bound of the time range
      * @return all commands in selected sandbox.
      */
     @ApiOperation(httpMethod = "GET",
@@ -98,14 +100,15 @@ public class TrainingConsoleCommandsRestController {
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @GetMapping(path = "/sandboxes/{sandboxId}/ranges", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findAllConsoleCommandsBySandboxIdAndTimestampRanges(
+    public ResponseEntity<Object> findAllConsoleCommandsBySandboxIdAndTimestampRange(
             @ApiParam(value = "Training sandbox ID", required = true)
             @PathVariable("sandboxId") Long sandboxId,
-            @ApiParam(value = "Range limits (timestamp in string format (yyyy-MM-dd'T'HH: mm: ss.SSS'Z ')) that aggregate " +
-                    "the resulting console commands by time intervals.", required = true)
-            @RequestParam("ranges") List<String> timestampRanges) {
+            @ApiParam(value = "Lower bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
+            @RequestParam(value = "from") Long from,
+            @ApiParam(value = "Upper bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
+            @RequestParam(value = "to") Long to) {
         try {
-            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxIdAggregatedByTimeRanges(sandboxId, timestampRanges));
+            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxIdAndTimeRange(sandboxId, from, to));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }

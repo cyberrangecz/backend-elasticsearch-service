@@ -39,9 +39,9 @@ public class TrainingConsoleCommandsService {
         }
     }
 
-    public List<List<Map<String, Object>>> findAllConsoleCommandsBySandboxIdAggregatedByTimeRanges(Long sandboxId, List<String> ranges) {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(Long sandboxId, Long from, Long to) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxIdAggregatedByTimeRanges(sandboxId, ranges);
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxIdAndTimeRange(sandboxId, from, to);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
