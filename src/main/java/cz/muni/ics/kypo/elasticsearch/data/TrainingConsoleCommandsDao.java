@@ -12,6 +12,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -93,34 +94,44 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     /**
      * Find all bash commands from sandbox aggregated by timestamp ranges.
      *
+     * Elasticserach query:
+     * GET kypo.logs.console*.sandbox={sandboxId}/_search
+     * {
+     *   "query": {
+     *     "range": {
+     *       "timestamp_str": {
+     *         "gte": {from}
+     *         "lte": {to}
+     *       }
+     *     }
+     *   }
+     * }
+     *
      * @param sandboxId the sandbox id
-     * @param ranges the list of range limits that divide bash commands into intervals
-     * @return the list
+     * @param from the lower bound of the time range (epoch_millis timestamp format)
+     * @param to the upper bound of the time range (epoch_millis timestamp format)
+     * @return the list of commands in given time range
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<List<Map<String, Object>>> findAllConsoleCommandsBySandboxIdAggregatedByTimeRanges(Long sandboxId, List<String> ranges) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(Long sandboxId, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_SANDBOX_ID, sandboxId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
-        searchSourceBuilder.size(0);
+        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         //Date Range Aggregation Query
-        DateRangeAggregationBuilder dateRangeAggregationBuilder = AggregationBuilders.dateRange("timestamp_ranges").field("timestamp_str");
-        dateRangeAggregationBuilder.addUnboundedTo(ranges.get(0));
-        for (int i = 1; i < ranges.size(); i++) {
-            dateRangeAggregationBuilder.addRange(ranges.get(i-1), ranges.get(i));
-        }
-        dateRangeAggregationBuilder.addUnboundedFrom(ranges.get(ranges.size()-1));
-        dateRangeAggregationBuilder.subAggregation(AggregationBuilders.topHits("by_top_hits").sort("timestamp_str").size(100));
-        searchSourceBuilder.aggregation(dateRangeAggregationBuilder);
+        RangeQueryBuilder dateRangeBuilder = QueryBuilders.rangeQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR)
+                .gte(from)
+                .lte(to);
+        searchSourceBuilder.query(dateRangeBuilder);
 
         SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
-        return resolveTimeRangeAggregation(searchResponse);
+        return handleElasticsearchResponse(searchResponse);
     }
 
     /**
