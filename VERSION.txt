@@ -1,1 +1,1 @@
-1.0.18  Anonymize the developer information in the source code.
+1.0.19  Get commands by time ranges.
