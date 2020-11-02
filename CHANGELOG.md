@@ -1,3 +1,19 @@
+* 5a7f33c -- Updated Swagger documentation generated.
+* c1fa356 -- Update pom.xml version based on GitLab tag. Done by CI.
+* b655851 -- Update VERSION.txt
+*   e3b4fa1 -- Merge branch '14-create-endpoint-to-get-bash-commands-by-sandbox-id-and-timestamp-range' into 'master'
+|\  
+| * e3f5adb -- Obtain console command by time range from-to.
+|/  
+*   90adf9d -- Merge branch '15-remove-the-last-asterisks-from-search-requests' into 'master'
+|\  
+| * ad51422 -- Removed asterisk or added dot where necessary.
+|/  
+*   9c0eb9b -- Merge branch '13-create-endpoint-to-get-bash-commands-by-sandbox-id-and-timestamp-ranges' into 'master'
+|\  
+| * edc71b6 -- Resolve "Create endpoint to get bash commands by sandbox id and timestamp ranges"
+|/  
+* b424f50 -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * aaf0ff0 -- Updated Swagger documentation generated.
 * fbc5047 -- Update pom.xml version based on GitLab tag. Done by CI.
 * 10ecfe7 -- Update VERSION.txt -- Anonymize the developer information in the source code.
