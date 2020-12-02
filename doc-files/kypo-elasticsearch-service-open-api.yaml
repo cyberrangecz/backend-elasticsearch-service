@@ -36,6 +36,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
     delete:
       tags:
       - "Training events"
@@ -58,6 +60,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-commands/sandboxes/{sandboxId}:
     get:
       tags:
@@ -83,6 +87,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
     delete:
       tags:
       - "Training events"
@@ -105,6 +111,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-commands/sandboxes/{sandboxId}/ranges:
     get:
       tags:
@@ -144,6 +152,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-events/training-definitions/{definitionId}/training-instances/{instanceId}:
     get:
       tags:
@@ -175,6 +185,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-events/training-definitions/{definitionId}/training-instances/{instanceId}/training-runs/{runId}:
     get:
       tags:
@@ -212,6 +224,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-events/training-instances/{instanceId}:
     delete:
       tags:
@@ -236,6 +250,8 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-events/training-instances/{instanceId}/training-runs/{runId}:
     delete:
       tags:
@@ -265,15 +281,15 @@ paths:
           description: "Unexpected condition was encountered."
           schema:
             $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
 securityDefinitions:
-  KYPO:
-    type: "oauth2"
-    authorizationUrl: "https://oidc.muni.cz/oidc/authorize"
-    flow: "implicit"
-    scopes:
-      openid: ""
-      email: ""
-      profile: ""
+  bearerAuth:
+    description: "Obtain bearer token from OIDC provider and enter the token in the\
+      \ following field. Use format 'Bearer {token}'"
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
 definitions:
   ApiEntityError:
     allOf:

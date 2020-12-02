@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(value = "/training-platform-commands", tags = "Training events", consumes = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "/training-platform-commands",
+     tags = "Training events",
+     consumes = MediaType.APPLICATION_JSON_VALUE,
+     authorizations = @Authorization(value = "bearerAuth"))
+
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Full authentication is required to access this resource.", response = ApiError.class),
         @ApiResponse(code = 403, message = "The necessary permissions are required for a resource.", response = ApiError.class)
