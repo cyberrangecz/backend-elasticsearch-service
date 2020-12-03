@@ -1,1 +1,1 @@
-1.0.19  Get commands by time ranges.
+1.0.20  New version of security commons without swagger UI configuration.
