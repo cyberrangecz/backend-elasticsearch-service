@@ -1,3 +1,19 @@
+* 64bddce -- Updated Swagger documentation generated.
+* 9696982 -- Update pom.xml version based on GitLab tag. Done by CI.
+* 74b8e1f -- Update VERSION.txt
+*   fdd9c3d -- Merge branch '19-adjust-project-to-the-removed-swagger-from-security-commons' into 'master'
+|\  
+| * 572f97e -- Resolve "Adjust project to the removed swagger from security-commons"
+|/  
+*   d5addff -- Merge branch '18-update-readme-file' into 'master'
+|\  
+| * aed6f90 -- Resolve "Update README file"
+|/  
+*   7304044 -- Merge branch '16-remove-authors-from-the-readme-file' into 'master'
+|\  
+| * 3000d41 -- Update README.md
+|/  
+* 29938bb -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * 5a7f33c -- Updated Swagger documentation generated.
 * c1fa356 -- Update pom.xml version based on GitLab tag. Done by CI.
 * b655851 -- Update VERSION.txt
