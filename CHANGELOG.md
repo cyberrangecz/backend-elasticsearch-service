@@ -1,3 +1,19 @@
+* 792e0c3 -- Updated Swagger documentation generated.
+* 0914209 -- Update pom.xml version based on GitLab tag. Done by CI.
+* a2ed947 -- Update VERSION.txt
+*   a4df2be -- Merge branch '23-setup-ci-to-push-docker-container-image-to-gitlab-registry' into 'master'
+|\  
+| * dd1a733 -- Config CI to push docker image on new tag to gitlab registry.
+|/  
+*   14c4262 -- Merge branch '21-update-gitlab-ci-yml-to-not-skip-ci-on-new-tag' into 'master'
+|\  
+| * 93a4263 -- Resolve "Update .gitlab-ci.yml to not skip CI on new tag"
+|/  
+*   9bd67d5 -- Merge branch '20-setup-ci-to-push-docker-containers-on-new-tag' into 'master'
+|\  
+| * 86a3b8e -- Setup CI to push docker container image to registry.
+|/  
+* 9235d4c -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * 64bddce -- Updated Swagger documentation generated.
 * 9696982 -- Update pom.xml version based on GitLab tag. Done by CI.
 * 74b8e1f -- Update VERSION.txt
@@ -77,14 +93,5 @@
 |/|   
 | * 2e876fc -- Resolve "Automatically generate Open API based on Swagger"
 |/  
-*   391082a -- Merge branch '6-change-handling-of-exceptions-in-customexceptionhandler' into 'master'
-|\  
-| * 49d0916 -- resource not found exception handling added.
-|/  
-* a7becb1 -- Update pom.xml version based on GitLab tag. Done by CI.
-* 7f95260 -- Update VERSION.txt
-*   645145b -- Merge branch '5-add-security-to-microservice' into 'master'
-|\  
-| * af259d0 -- Added security to service
-|/  
-* ae84da5 -- Update Dockerfile
+* 391082a -- Merge branch '6-change-handling-of-exceptions-in-customexceptionhandler' into 'master'
+* 49d0916 -- resource not found exception handling added.
