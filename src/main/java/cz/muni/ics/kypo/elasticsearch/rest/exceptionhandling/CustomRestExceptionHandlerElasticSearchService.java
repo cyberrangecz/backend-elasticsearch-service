@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -38,7 +39,7 @@ import java.io.StringWriter;
  * The type Custom rest exception handler training.
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@RestControllerAdvice(basePackages = "cz.muni.ics.kypo.elasticsearch")
+@RestControllerAdvice
 public class CustomRestExceptionHandlerElasticSearchService extends ResponseEntityExceptionHandler {
 
     private static final UrlPathHelper URL_PATH_HELPER = new UrlPathHelper();
@@ -121,6 +122,16 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
     }
 
     // Handling of own exceptions
+
+    @ExceptionHandler({InsufficientAuthenticationException.class})
+    protected ResponseEntity<Object> handleAuthenticationException(final InsufficientAuthenticationException ex, final WebRequest request, HttpServletRequest req) {
+        final ApiError apiError = ApiError.of(
+                HttpStatus.UNAUTHORIZED,
+                ex.getMessage(),
+                getFullStackTrace(ex),
+                request.getContextPath());
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
 
     /**
      * Handle constraint violation response entity.
