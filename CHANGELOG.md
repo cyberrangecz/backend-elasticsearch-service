@@ -1,3 +1,20 @@
+* 9c3cd7a -- Updated Swagger documentation generated.
+* 1191eb2 -- Update pom.xml version based on GitLab tag. Done by CI.
+* fa7fb75 -- Update VERSION.txt
+*   47ee31f -- Merge branch '26-handle-insufficientauthenticationexception-when-user-is-not-authorized' into 'master'
+|\  
+| * d1e8b05 -- Added handling of the InsufficientAuthenticationException.
+* |   2666057 -- Merge branch '27-resolve-remove-unused-variables-from-gitlab-ci-yml' into 'master'
+|\ \  
+| |/  
+|/|   
+| * 55b69d6 -- Update .gitlab-ci.yml
+|/  
+*   c3014c6 -- Merge branch '24-change-default-proprietary-repo-and-bump-new-version-of-elasticsearch-documents-dependency' into 'master'
+|\  
+| * 9deecc5 -- Resolve "Change default proprietary repo and bump new version of elasticsearch documents dependency"
+|/  
+* f74d587 -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
 * 792e0c3 -- Updated Swagger documentation generated.
 * 0914209 -- Update pom.xml version based on GitLab tag. Done by CI.
 * a2ed947 -- Update VERSION.txt
@@ -76,22 +93,3 @@
 | * 63c842f -- Resolve "Add REST Resource to Retrieve Elasticsearch Commands"
 |/  
 * 8ab6814 -- Update .gitlab-ci.yml
-* b2d512d -- CHANGELOG.md file updated with commits between the current and previous tag. Done by CI.
-* 22a6eb7 -- Updated Swagger documentation generated.
-* f5f025b -- Update pom.xml version based on GitLab tag. Done by CI.
-* e24bbc4 -- Update VERSION.txt
-*   d133f12 -- Merge branch '9-change-version-of-elasticsearch-documents-dependency' into 'master'
-|\  
-| * 37621b8 -- Bumped version of kypo-elasticsearch-documents dependency to 1.0.13
-|/  
-*   500dac9 -- Merge branch '8-return-empty-list-of-events-instead-of-resource-not-found-exception' into 'master'
-|\  
-| * b5186e8 -- Method handleElasticsearchResponse return empty list instead of throwing exception
-* |   935b4a8 -- Merge branch '7-automatically-generate-open-api-based-on-swagger' into 'master'
-|\ \  
-| |/  
-|/|   
-| * 2e876fc -- Resolve "Automatically generate Open API based on Swagger"
-|/  
-* 391082a -- Merge branch '6-change-handling-of-exceptions-in-customexceptionhandler' into 'master'
-* 49d0916 -- resource not found exception handling added.
