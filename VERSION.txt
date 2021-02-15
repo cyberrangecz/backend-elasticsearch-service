@@ -1,1 +1,1 @@
-1.0.21 Setup CI to push docker container image to gitlab registry.
+1.0.22 Handling InsufficientAuthenticationException and small refactoring.
