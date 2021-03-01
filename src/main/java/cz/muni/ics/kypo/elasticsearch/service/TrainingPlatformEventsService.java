@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class TrainingPlatformEventsService {
 
-    private TrainingPlatformEventsDAO trainingPlatformEventsDAO;
+    private final TrainingPlatformEventsDAO trainingPlatformEventsDAO;
 
     /**
      * Instantiates a new Training events service.

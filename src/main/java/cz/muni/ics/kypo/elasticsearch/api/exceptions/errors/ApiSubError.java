@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.http.HttpStatus;
+
 @ApiModel(value = "ApiSubError", subTypes = {JavaApiError.class, PythonApiError.class},
         description = "Superclass for classes JavaApiError and PythonApiError")
 @JsonSubTypes({

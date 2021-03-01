@@ -3,7 +3,7 @@ image: 'maven:3.6.3-jdk-11-slim'
 variables:
   PROJECT_ARTIFACT_ID: kypo-elasticsearch-service
   DEPLOYMENT_INFO_VERSION_FILE: VERSION.txt
-  
+
 stages:
   - create_tag
   - build
@@ -44,41 +44,41 @@ create_tag:
   - git tag -a v$VERSION -m "$TAG_MESSAGE"
   - git push
   rules:
-  - if: '$CI_COMMIT_BRANCH == "master"'
-    changes:
-      - VERSION.txt
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - VERSION.txt
   artifacts:
     paths:
-    - ./pom.xml
-    - ./*/pom.xml
+      - ./pom.xml
+      - ./*/pom.xml
     expire_in: 1 hour
     when: on_success
-    
+
 build:
   stage: build
   script:
-  - mvn clean install -DskipTests -Dproprietary-repo-url=$PROPRIETARY_REPO_URL
+    - mvn clean install -DskipTests -Dproprietary-repo-url=$PROPRIETARY_REPO_URL
   rules:
-  - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH'
   artifacts:
     paths:
-    - target/$PROJECT_ARTIFACT_ID-*.jar
+      - target/$PROJECT_ARTIFACT_ID-*.jar
     expire_in: 1 hour
     when: on_success
-    
+
 tests:
   stage: tests
   script:
-  - mvn test -Dproprietary-repo-url=$PROPRIETARY_REPO_URL
+    - mvn test -Dproprietary-repo-url=$PROPRIETARY_REPO_URL
   rules:
-  - if: '$CI_COMMIT_BRANCH == "master"'
-    changes:
-      - VERSION.txt
-    when: never
-  - if: '$CI_COMMIT_BRANCH'
-  
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - VERSION.txt
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+
 docker_image_push:
-  before_script: [] #prevent global before_script from running
+  before_script: [ ] #prevent global before_script from running
   variables:
     CI_CUSTOM_IMAGE_NAME: kypo-elasticsearch-service
   stage: docker_image_push

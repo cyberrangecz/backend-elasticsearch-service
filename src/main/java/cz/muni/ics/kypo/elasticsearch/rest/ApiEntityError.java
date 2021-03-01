@@ -52,7 +52,7 @@ public class ApiEntityError extends ApiError {
             return "Resource " + entityErrorDetail.getEntity() + " ("
                     + entityErrorDetail.getIdentifier() + ": "
                     + entityErrorDetail.getIdentifierValue() + ") not found.";
-        } else  if (entityErrorDetail != null && entityErrorDetail.getReason() != null && !entityErrorDetail.getReason().isBlank()) {
+        } else if (entityErrorDetail != null && entityErrorDetail.getReason() != null && !entityErrorDetail.getReason().isBlank()) {
             return entityErrorDetail.getReason();
         } else {
             return defaultMessage;
@@ -60,7 +60,7 @@ public class ApiEntityError extends ApiError {
     }
 
     private static String getMessage(EntityErrorDetail entityErrorDetail, String defaultMessage) {
-        if(entityErrorDetail == null) {
+        if (entityErrorDetail == null) {
             return defaultMessage;
         }
         return entityErrorDetail.getReason() == null ? defaultMessage : entityErrorDetail.getReason();

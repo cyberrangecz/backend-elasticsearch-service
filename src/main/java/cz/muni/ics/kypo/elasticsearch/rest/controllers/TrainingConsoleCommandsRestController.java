@@ -12,12 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Api(value = "/training-platform-commands",
-     tags = "Training events",
-     consumes = MediaType.APPLICATION_JSON_VALUE,
-     authorizations = @Authorization(value = "bearerAuth"))
+        tags = "Training events",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        authorizations = @Authorization(value = "bearerAuth"))
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Full authentication is required to access this resource.", response = ApiError.class),
@@ -27,7 +25,7 @@ import java.util.List;
 @RequestMapping(path = "/training-platform-commands", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TrainingConsoleCommandsRestController {
 
-    private TrainingConsoleCommandsService trainingConsoleCommandsService;
+    private final TrainingConsoleCommandsService trainingConsoleCommandsService;
 
     @Autowired
     public TrainingConsoleCommandsRestController(TrainingConsoleCommandsService trainingConsoleCommandsService) {
@@ -90,8 +88,8 @@ public class TrainingConsoleCommandsRestController {
      * Get all commands in particular sandbox aggregated by timestamp ranges.
      *
      * @param sandboxId id of wanted sandbox
-     * @param from the lower bound of the time range
-     * @param to the upper bound of the time range
+     * @param from      the lower bound of the time range
+     * @param to        the upper bound of the time range
      * @return all commands in selected sandbox.
      */
     @ApiOperation(httpMethod = "GET",
