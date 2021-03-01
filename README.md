@@ -36,17 +36,17 @@ Docker            | https://docs.docker.com/install/
 #### 1. Preparation of Configuration Files
 To build and run the project in docker it is necessary to prepare several configurations:
 * Set the [OpenID Connect configuration](https://docs.crp.kypo.muni.cz/installation-guide/setting-up-oidc-provider/).
-* Fill OIDC credentials gained from the previous step and set additional settings in the kypo-elasticsearch-service.properties](https://gitlab.ics.muni.cz/muni-kypo-crp/backend-java/kypo-elasticsearch-service/-/blob/master/etc/kypo-elasticsearch-service.properties) file and save it.
+* Fill OIDC credentials gained from the previous step and set additional settings in the [kypo-elasticsearch-service.properties](https://gitlab.ics.muni.cz/muni-kypo-crp/backend-java/kypo-elasticsearch-service/-/blob/master/etc/kypo-elasticsearch-service.properties) file and save it.
 
 #### 2. Build Docker Image
 The root folder of the project contains a Dockerfile with commands to assemble a docker image.  To build an image run the following command:
 ```bash
-sudo docker build -t {image name} .
+sudo docker build --build-arg PROPRIETARY_REPO_URL={path to proprietary repo} -t {image name} .
 ```
 
 e.g.:
 ```bash
-sudo docker build -t elasticsearch-service-image .
+sudo docker build --build-arg PROPRIETARY_REPO_URL=https://gitlab.ics.muni.cz/api/v4/projects/2358/packages/maven -t elasticsearch-service-image .
 ```
 
 Dockefile contains several default arguments:
@@ -58,11 +58,6 @@ Those arguments can be overwritten during the build of the image, by adding the 
 --build-arg {name of argument}={value of argument} 
 ``` 
 
-e.g.:
-```bash
-sudo docker build --build-arg PROPRIETARY_REPO_URL=https://nexus.csirt.muni.cz/repository/kypo-maven-group/ -t elasticsearch-service .
-```
-
 #### 3. Start the Project
 Before you run a docker container, make sure that your ***OIDC Provider*** and [kypo2-user-and-group](https://gitlab.ics.muni.cz/muni-kypo-crp/backend-java/kypo2-user-and-group) service is running. To run a docker container, run the following command: 
 ```
@@ -71,4 +66,9 @@ sudo docker run --name {container name} --network host -it -p {port in host}:{po
 e.g. with this command:
 ```
 sudo docker run --name elasticsearch-service-container --network host -it -p 8085:8085 elasticsearch-service-image
+```
+
+Add the following option to use the custom property file: 
+```
+-v {path to your config file}:/app/etc/kypo-elasticsearch-service.properties
 ```
