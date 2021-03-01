@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class TrainingConsoleCommandsService {
 
-    private TrainingConsoleCommandsDao trainingConsoleCommandsDao;
+    private final TrainingConsoleCommandsDao trainingConsoleCommandsDao;
 
     @Autowired
     public TrainingConsoleCommandsService(TrainingConsoleCommandsDao trainingConsoleCommandsDao) {

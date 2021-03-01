@@ -15,9 +15,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.bucket.range.DateRangeAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.range.ParsedRange;
 import org.elasticsearch.search.aggregations.bucket.range.Range;
 import org.elasticsearch.search.aggregations.metrics.TopHits;
@@ -28,7 +26,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -93,23 +94,23 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
 
     /**
      * Find all bash commands from sandbox aggregated by timestamp ranges.
-     *
+     * <p>
      * Elasticserach query:
      * GET kypo.logs.console*.sandbox={sandboxId}/_search
      * {
-     *   "query": {
-     *     "range": {
-     *       "timestamp_str": {
-     *         "gte": {from}
-     *         "lte": {to}
-     *       }
-     *     }
-     *   }
+     * "query": {
+     * "range": {
+     * "timestamp_str": {
+     * "gte": {from}
+     * "lte": {to}
+     * }
+     * }
+     * }
      * }
      *
      * @param sandboxId the sandbox id
-     * @param from the lower bound of the time range (epoch_millis timestamp format)
-     * @param to the upper bound of the time range (epoch_millis timestamp format)
+     * @param from      the lower bound of the time range (epoch_millis timestamp format)
+     * @param to        the upper bound of the time range (epoch_millis timestamp format)
      * @return the list of commands in given time range
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
@@ -198,7 +199,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     private List<Map<String, Object>> resolveBucketTopHits(Range.Bucket rangeBucket) throws ElasticsearchTrainingDataLayerException {
         List<Map<String, Object>> resultBucketTopHits = new ArrayList<>();
         TopHits topHits = rangeBucket.getAggregations().get("by_top_hits");
-        SearchHits responseHits =  topHits.getHits();
+        SearchHits responseHits = topHits.getHits();
 
         if (responseHits != null) {
             SearchHit[] results = responseHits.getHits();

@@ -7,7 +7,7 @@ import javax.validation.ConstraintViolationException;
 
 
 @ResponseStatus(reason = "Error when calling external service API")
-public class MicroserviceApiException extends RuntimeException{
+public class MicroserviceApiException extends RuntimeException {
 
     private ApiSubError apiSubError;
 

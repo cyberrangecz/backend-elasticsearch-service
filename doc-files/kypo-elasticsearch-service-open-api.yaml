@@ -6,27 +6,27 @@ info:
 host: "localhost:8080"
 basePath: "/kypo-elasticsearch-service/api/v1"
 tags:
-- name: "Training events"
+  - name: "Training events"
 schemes:
-- "http"
-- "https"
+  - "http"
+  - "https"
 paths:
   /training-platform-commands/pools/{poolId}:
     get:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Get all commands in particular pool."
       description: ""
       operationId: "findAllConsoleCommandsByPoolId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "poolId"
-        in: "path"
-        description: "Training pool ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "poolId"
+          in: "path"
+          description: "Training pool ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All commands in particular pool were found."
@@ -37,22 +37,22 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
     delete:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Delete all commands in particular pool."
       description: ""
       operationId: "deleteConsoleCommandsByPoolId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "poolId"
-        in: "path"
-        description: "Training pool ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "poolId"
+          in: "path"
+          description: "Training pool ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All events in particular training sandbox by id were deleted."
@@ -61,23 +61,23 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
   /training-platform-commands/sandboxes/{sandboxId}:
     get:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Get all commands in particular sandbox."
       description: ""
       operationId: "findAllConsoleCommandsBySandboxId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "sandboxId"
-        in: "path"
-        description: "Training sandbox ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "sandboxId"
+          in: "path"
+          description: "Training sandbox ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All commands in particular sandbox were found."
@@ -88,22 +88,22 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
     delete:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Delete all commands in particular pool."
       description: ""
       operationId: "deleteConsoleCommandsByPoolId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "sandboxId"
-        in: "path"
-        description: "Training sandbox ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "sandboxId"
+          in: "path"
+          description: "Training sandbox ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All commands in particular sandbox by id were deleted."
@@ -112,37 +112,37 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
   /training-platform-commands/sandboxes/{sandboxId}/ranges:
     get:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Get all commands in particular sandbox."
       description: ""
       operationId: "findAllConsoleCommandsBySandboxId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "sandboxId"
-        in: "path"
-        description: "Training sandbox ID"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "from"
-        in: "query"
-        description: "Lower bound of the time range (timestamp in epoch_millis format)\
+        - name: "sandboxId"
+          in: "path"
+          description: "Training sandbox ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "from"
+          in: "query"
+          description: "Lower bound of the time range (timestamp in epoch_millis format)\
           \ of the the resulting console commands."
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "to"
-        in: "query"
-        description: "Upper bound of the time range (timestamp in epoch_millis format)\
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "to"
+          in: "query"
+          description: "Upper bound of the time range (timestamp in epoch_millis format)\
           \ of the the resulting console commands."
-        required: true
-        type: "integer"
-        format: "int64"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All commands in particular sandbox were found."
@@ -153,29 +153,29 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
   /training-platform-events/training-definitions/{definitionId}/training-instances/{instanceId}:
     get:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Get all events in particular training definition and training instance."
       description: ""
       operationId: "getAllEventsByTrainingDefinitionAndTrainingInstanceId"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "definitionId"
-        in: "path"
-        description: "Training definition ID"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "instanceId"
-        in: "path"
-        description: "Training instance ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "definitionId"
+          in: "path"
+          description: "Training definition ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "instanceId"
+          in: "path"
+          description: "Training instance ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All events in particular training run by id was found."
@@ -186,35 +186,35 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
   /training-platform-events/training-definitions/{definitionId}/training-instances/{instanceId}/training-runs/{runId}:
     get:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Get all events in particular training run."
       description: ""
       operationId: "getAllEventsFromTrainingRun"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "definitionId"
-        in: "path"
-        description: "Training definition ID"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "instanceId"
-        in: "path"
-        description: "Training instance ID"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "runId"
-        in: "path"
-        description: "Training run ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "definitionId"
+          in: "path"
+          description: "Training definition ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "instanceId"
+          in: "path"
+          description: "Training instance ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "runId"
+          in: "path"
+          description: "Training run ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All events in particular training run by id was found."
@@ -225,23 +225,23 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
   /training-platform-events/training-instances/{instanceId}:
     delete:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Delete all events in particular training instance."
       description: ""
       operationId: "deleteEventsFromTrainingInstance"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "instanceId"
-        in: "path"
-        description: "Training instance ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "instanceId"
+          in: "path"
+          description: "Training instance ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All events in particular training instance by id was were\
@@ -251,29 +251,29 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
   /training-platform-events/training-instances/{instanceId}/training-runs/{runId}:
     delete:
       tags:
-      - "Training events"
+        - "Training events"
       summary: "Delete all events in particular training run."
       description: ""
       operationId: "deleteEventsFromTrainingRun"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "instanceId"
-        in: "path"
-        description: "Training instance ID"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "runId"
-        in: "path"
-        description: "Training run ID"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "instanceId"
+          in: "path"
+          description: "Training instance ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "runId"
+          in: "path"
+          description: "Training run ID"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "All events in particular training run by id was were deleted."
@@ -282,7 +282,7 @@ paths:
           schema:
             $ref: "#/definitions/ApiError"
       security:
-      - bearerAuth: []
+        - bearerAuth: [ ]
 securityDefinitions:
   bearerAuth:
     description: "Obtain bearer token from OIDC provider and enter the token in the\
@@ -293,13 +293,13 @@ securityDefinitions:
 definitions:
   ApiEntityError:
     allOf:
-    - $ref: "#/definitions/ApiError"
-    - type: "object"
-      properties:
-        entityErrorDetail:
-          description: "Detail of the entity which is related to the error."
-          $ref: "#/definitions/EntityErrorDetail"
-      description: "A detailed error information related to the entity."
+      - $ref: "#/definitions/ApiError"
+      - type: "object"
+        properties:
+          entityErrorDetail:
+            description: "Detail of the entity which is related to the error."
+            $ref: "#/definitions/EntityErrorDetail"
+        description: "A detailed error information related to the entity."
   ApiError:
     type: "object"
     properties:
@@ -313,73 +313,73 @@ definitions:
         example: "404 Not found (different for each type of exception)."
         description: "The HTTP response status code"
         enum:
-        - "CONTINUE"
-        - "SWITCHING_PROTOCOLS"
-        - "PROCESSING"
-        - "CHECKPOINT"
-        - "OK"
-        - "CREATED"
-        - "ACCEPTED"
-        - "NON_AUTHORITATIVE_INFORMATION"
-        - "NO_CONTENT"
-        - "RESET_CONTENT"
-        - "PARTIAL_CONTENT"
-        - "MULTI_STATUS"
-        - "ALREADY_REPORTED"
-        - "IM_USED"
-        - "MULTIPLE_CHOICES"
-        - "MOVED_PERMANENTLY"
-        - "FOUND"
-        - "MOVED_TEMPORARILY"
-        - "SEE_OTHER"
-        - "NOT_MODIFIED"
-        - "USE_PROXY"
-        - "TEMPORARY_REDIRECT"
-        - "PERMANENT_REDIRECT"
-        - "BAD_REQUEST"
-        - "UNAUTHORIZED"
-        - "PAYMENT_REQUIRED"
-        - "FORBIDDEN"
-        - "NOT_FOUND"
-        - "METHOD_NOT_ALLOWED"
-        - "NOT_ACCEPTABLE"
-        - "PROXY_AUTHENTICATION_REQUIRED"
-        - "REQUEST_TIMEOUT"
-        - "CONFLICT"
-        - "GONE"
-        - "LENGTH_REQUIRED"
-        - "PRECONDITION_FAILED"
-        - "PAYLOAD_TOO_LARGE"
-        - "REQUEST_ENTITY_TOO_LARGE"
-        - "URI_TOO_LONG"
-        - "REQUEST_URI_TOO_LONG"
-        - "UNSUPPORTED_MEDIA_TYPE"
-        - "REQUESTED_RANGE_NOT_SATISFIABLE"
-        - "EXPECTATION_FAILED"
-        - "I_AM_A_TEAPOT"
-        - "INSUFFICIENT_SPACE_ON_RESOURCE"
-        - "METHOD_FAILURE"
-        - "DESTINATION_LOCKED"
-        - "UNPROCESSABLE_ENTITY"
-        - "LOCKED"
-        - "FAILED_DEPENDENCY"
-        - "UPGRADE_REQUIRED"
-        - "PRECONDITION_REQUIRED"
-        - "TOO_MANY_REQUESTS"
-        - "REQUEST_HEADER_FIELDS_TOO_LARGE"
-        - "UNAVAILABLE_FOR_LEGAL_REASONS"
-        - "INTERNAL_SERVER_ERROR"
-        - "NOT_IMPLEMENTED"
-        - "BAD_GATEWAY"
-        - "SERVICE_UNAVAILABLE"
-        - "GATEWAY_TIMEOUT"
-        - "HTTP_VERSION_NOT_SUPPORTED"
-        - "VARIANT_ALSO_NEGOTIATES"
-        - "INSUFFICIENT_STORAGE"
-        - "LOOP_DETECTED"
-        - "BANDWIDTH_LIMIT_EXCEEDED"
-        - "NOT_EXTENDED"
-        - "NETWORK_AUTHENTICATION_REQUIRED"
+          - "CONTINUE"
+          - "SWITCHING_PROTOCOLS"
+          - "PROCESSING"
+          - "CHECKPOINT"
+          - "OK"
+          - "CREATED"
+          - "ACCEPTED"
+          - "NON_AUTHORITATIVE_INFORMATION"
+          - "NO_CONTENT"
+          - "RESET_CONTENT"
+          - "PARTIAL_CONTENT"
+          - "MULTI_STATUS"
+          - "ALREADY_REPORTED"
+          - "IM_USED"
+          - "MULTIPLE_CHOICES"
+          - "MOVED_PERMANENTLY"
+          - "FOUND"
+          - "MOVED_TEMPORARILY"
+          - "SEE_OTHER"
+          - "NOT_MODIFIED"
+          - "USE_PROXY"
+          - "TEMPORARY_REDIRECT"
+          - "PERMANENT_REDIRECT"
+          - "BAD_REQUEST"
+          - "UNAUTHORIZED"
+          - "PAYMENT_REQUIRED"
+          - "FORBIDDEN"
+          - "NOT_FOUND"
+          - "METHOD_NOT_ALLOWED"
+          - "NOT_ACCEPTABLE"
+          - "PROXY_AUTHENTICATION_REQUIRED"
+          - "REQUEST_TIMEOUT"
+          - "CONFLICT"
+          - "GONE"
+          - "LENGTH_REQUIRED"
+          - "PRECONDITION_FAILED"
+          - "PAYLOAD_TOO_LARGE"
+          - "REQUEST_ENTITY_TOO_LARGE"
+          - "URI_TOO_LONG"
+          - "REQUEST_URI_TOO_LONG"
+          - "UNSUPPORTED_MEDIA_TYPE"
+          - "REQUESTED_RANGE_NOT_SATISFIABLE"
+          - "EXPECTATION_FAILED"
+          - "I_AM_A_TEAPOT"
+          - "INSUFFICIENT_SPACE_ON_RESOURCE"
+          - "METHOD_FAILURE"
+          - "DESTINATION_LOCKED"
+          - "UNPROCESSABLE_ENTITY"
+          - "LOCKED"
+          - "FAILED_DEPENDENCY"
+          - "UPGRADE_REQUIRED"
+          - "PRECONDITION_REQUIRED"
+          - "TOO_MANY_REQUESTS"
+          - "REQUEST_HEADER_FIELDS_TOO_LARGE"
+          - "UNAVAILABLE_FOR_LEGAL_REASONS"
+          - "INTERNAL_SERVER_ERROR"
+          - "NOT_IMPLEMENTED"
+          - "BAD_GATEWAY"
+          - "SERVICE_UNAVAILABLE"
+          - "GATEWAY_TIMEOUT"
+          - "HTTP_VERSION_NOT_SUPPORTED"
+          - "VARIANT_ALSO_NEGOTIATES"
+          - "INSUFFICIENT_STORAGE"
+          - "LOOP_DETECTED"
+          - "BANDWIDTH_LIMIT_EXCEEDED"
+          - "NOT_EXTENDED"
+          - "NETWORK_AUTHENTICATION_REQUIRED"
       message:
         type: "string"
         example: "The IDMGroup could not be found in database (different for each\
@@ -400,13 +400,13 @@ definitions:
     description: "Superclass for classes ApiEntityError and ApiMicroserviceError"
   ApiMicroserviceError:
     allOf:
-    - $ref: "#/definitions/ApiError"
-    - type: "object"
-      properties:
-        apiSubError:
-          description: "Detailed error from another microservice."
-          $ref: "#/definitions/ApiSubError"
-      description: "A detailed error information related to the microservice."
+      - $ref: "#/definitions/ApiError"
+      - type: "object"
+        properties:
+          apiSubError:
+            description: "Detailed error from another microservice."
+            $ref: "#/definitions/ApiSubError"
+        description: "A detailed error information related to the microservice."
   ApiSubError:
     type: "object"
     properties:
@@ -415,73 +415,73 @@ definitions:
         example: "404 Not found (different for each type of exception)."
         description: "The HTTP response status code"
         enum:
-        - "CONTINUE"
-        - "SWITCHING_PROTOCOLS"
-        - "PROCESSING"
-        - "CHECKPOINT"
-        - "OK"
-        - "CREATED"
-        - "ACCEPTED"
-        - "NON_AUTHORITATIVE_INFORMATION"
-        - "NO_CONTENT"
-        - "RESET_CONTENT"
-        - "PARTIAL_CONTENT"
-        - "MULTI_STATUS"
-        - "ALREADY_REPORTED"
-        - "IM_USED"
-        - "MULTIPLE_CHOICES"
-        - "MOVED_PERMANENTLY"
-        - "FOUND"
-        - "MOVED_TEMPORARILY"
-        - "SEE_OTHER"
-        - "NOT_MODIFIED"
-        - "USE_PROXY"
-        - "TEMPORARY_REDIRECT"
-        - "PERMANENT_REDIRECT"
-        - "BAD_REQUEST"
-        - "UNAUTHORIZED"
-        - "PAYMENT_REQUIRED"
-        - "FORBIDDEN"
-        - "NOT_FOUND"
-        - "METHOD_NOT_ALLOWED"
-        - "NOT_ACCEPTABLE"
-        - "PROXY_AUTHENTICATION_REQUIRED"
-        - "REQUEST_TIMEOUT"
-        - "CONFLICT"
-        - "GONE"
-        - "LENGTH_REQUIRED"
-        - "PRECONDITION_FAILED"
-        - "PAYLOAD_TOO_LARGE"
-        - "REQUEST_ENTITY_TOO_LARGE"
-        - "URI_TOO_LONG"
-        - "REQUEST_URI_TOO_LONG"
-        - "UNSUPPORTED_MEDIA_TYPE"
-        - "REQUESTED_RANGE_NOT_SATISFIABLE"
-        - "EXPECTATION_FAILED"
-        - "I_AM_A_TEAPOT"
-        - "INSUFFICIENT_SPACE_ON_RESOURCE"
-        - "METHOD_FAILURE"
-        - "DESTINATION_LOCKED"
-        - "UNPROCESSABLE_ENTITY"
-        - "LOCKED"
-        - "FAILED_DEPENDENCY"
-        - "UPGRADE_REQUIRED"
-        - "PRECONDITION_REQUIRED"
-        - "TOO_MANY_REQUESTS"
-        - "REQUEST_HEADER_FIELDS_TOO_LARGE"
-        - "UNAVAILABLE_FOR_LEGAL_REASONS"
-        - "INTERNAL_SERVER_ERROR"
-        - "NOT_IMPLEMENTED"
-        - "BAD_GATEWAY"
-        - "SERVICE_UNAVAILABLE"
-        - "GATEWAY_TIMEOUT"
-        - "HTTP_VERSION_NOT_SUPPORTED"
-        - "VARIANT_ALSO_NEGOTIATES"
-        - "INSUFFICIENT_STORAGE"
-        - "LOOP_DETECTED"
-        - "BANDWIDTH_LIMIT_EXCEEDED"
-        - "NOT_EXTENDED"
-        - "NETWORK_AUTHENTICATION_REQUIRED"
+          - "CONTINUE"
+          - "SWITCHING_PROTOCOLS"
+          - "PROCESSING"
+          - "CHECKPOINT"
+          - "OK"
+          - "CREATED"
+          - "ACCEPTED"
+          - "NON_AUTHORITATIVE_INFORMATION"
+          - "NO_CONTENT"
+          - "RESET_CONTENT"
+          - "PARTIAL_CONTENT"
+          - "MULTI_STATUS"
+          - "ALREADY_REPORTED"
+          - "IM_USED"
+          - "MULTIPLE_CHOICES"
+          - "MOVED_PERMANENTLY"
+          - "FOUND"
+          - "MOVED_TEMPORARILY"
+          - "SEE_OTHER"
+          - "NOT_MODIFIED"
+          - "USE_PROXY"
+          - "TEMPORARY_REDIRECT"
+          - "PERMANENT_REDIRECT"
+          - "BAD_REQUEST"
+          - "UNAUTHORIZED"
+          - "PAYMENT_REQUIRED"
+          - "FORBIDDEN"
+          - "NOT_FOUND"
+          - "METHOD_NOT_ALLOWED"
+          - "NOT_ACCEPTABLE"
+          - "PROXY_AUTHENTICATION_REQUIRED"
+          - "REQUEST_TIMEOUT"
+          - "CONFLICT"
+          - "GONE"
+          - "LENGTH_REQUIRED"
+          - "PRECONDITION_FAILED"
+          - "PAYLOAD_TOO_LARGE"
+          - "REQUEST_ENTITY_TOO_LARGE"
+          - "URI_TOO_LONG"
+          - "REQUEST_URI_TOO_LONG"
+          - "UNSUPPORTED_MEDIA_TYPE"
+          - "REQUESTED_RANGE_NOT_SATISFIABLE"
+          - "EXPECTATION_FAILED"
+          - "I_AM_A_TEAPOT"
+          - "INSUFFICIENT_SPACE_ON_RESOURCE"
+          - "METHOD_FAILURE"
+          - "DESTINATION_LOCKED"
+          - "UNPROCESSABLE_ENTITY"
+          - "LOCKED"
+          - "FAILED_DEPENDENCY"
+          - "UPGRADE_REQUIRED"
+          - "PRECONDITION_REQUIRED"
+          - "TOO_MANY_REQUESTS"
+          - "REQUEST_HEADER_FIELDS_TOO_LARGE"
+          - "UNAVAILABLE_FOR_LEGAL_REASONS"
+          - "INTERNAL_SERVER_ERROR"
+          - "NOT_IMPLEMENTED"
+          - "BAD_GATEWAY"
+          - "SERVICE_UNAVAILABLE"
+          - "GATEWAY_TIMEOUT"
+          - "HTTP_VERSION_NOT_SUPPORTED"
+          - "VARIANT_ALSO_NEGOTIATES"
+          - "INSUFFICIENT_STORAGE"
+          - "LOOP_DETECTED"
+          - "BANDWIDTH_LIMIT_EXCEEDED"
+          - "NOT_EXTENDED"
+          - "NETWORK_AUTHENTICATION_REQUIRED"
     description: "Superclass for classes JavaApiError and PythonApiError"
   EntityErrorDetail:
     type: "object"
@@ -504,48 +504,48 @@ definitions:
         description: "Detailed message of the exception"
   JavaApiError:
     allOf:
-    - $ref: "#/definitions/ApiSubError"
-    - type: "object"
-      properties:
-        timestamp:
-          type: "integer"
-          format: "int64"
-          example: "1574062900 (different for each type of exception)"
-          description: "The time when the exception occurred"
-        message:
-          type: "string"
-          example: "The IDMGroup could not be found in database (different for each\
-            \ type of exception)."
-          description: "The specific description of the ApiError."
-        errors:
-          type: "array"
-          example: "[The requested resource was not found (different for each type\
-            \ of exception).]"
-          description: "The list of main reasons of the ApiError."
-          items:
+      - $ref: "#/definitions/ApiSubError"
+      - type: "object"
+        properties:
+          timestamp:
+            type: "integer"
+            format: "int64"
+            example: "1574062900 (different for each type of exception)"
+            description: "The time when the exception occurred"
+          message:
             type: "string"
-        path:
-          type: "string"
-          example: "/kypo2-rest-user-and-group/api/v1/groups/1000 (different for each\
+            example: "The IDMGroup could not be found in database (different for each\
             \ type of exception)."
-          description: "The requested URI path which caused error."
-        entity_error_detail:
-          description: "Entity detail related to the error."
-          $ref: "#/definitions/EntityErrorDetail"
-      description: "A detailed error from another Java mircorservice."
+            description: "The specific description of the ApiError."
+          errors:
+            type: "array"
+            example: "[The requested resource was not found (different for each type\
+            \ of exception).]"
+            description: "The list of main reasons of the ApiError."
+            items:
+              type: "string"
+          path:
+            type: "string"
+            example: "/kypo2-rest-user-and-group/api/v1/groups/1000 (different for each\
+            \ type of exception)."
+            description: "The requested URI path which caused error."
+          entity_error_detail:
+            description: "Entity detail related to the error."
+            $ref: "#/definitions/EntityErrorDetail"
+        description: "A detailed error from another Java mircorservice."
   PythonApiError:
     allOf:
-    - $ref: "#/definitions/ApiSubError"
-    - type: "object"
-      properties:
-        detail:
-          type: "string"
-          example: "Sandbox could not be found."
-          description: "Detail message of the error."
-        parameters:
-          type: "object"
-          example: "name: sandbox"
-          description: "Parameters to specify details of the error."
-          additionalProperties:
+      - $ref: "#/definitions/ApiSubError"
+      - type: "object"
+        properties:
+          detail:
             type: "string"
-      description: "A detailed error from another Python mircorservice."
+            example: "Sandbox could not be found."
+            description: "Detail message of the error."
+          parameters:
+            type: "object"
+            example: "name: sandbox"
+            description: "Parameters to specify details of the error."
+            additionalProperties:
+              type: "string"
+        description: "A detailed error from another Python mircorservice."

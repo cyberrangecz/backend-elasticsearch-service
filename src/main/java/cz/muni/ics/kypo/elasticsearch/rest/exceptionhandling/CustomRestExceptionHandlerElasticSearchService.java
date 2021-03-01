@@ -3,7 +3,6 @@ package cz.muni.ics.kypo.elasticsearch.rest.exceptionhandling;
 
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.MicroserviceApiException;
 import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotFoundException;
-import cz.muni.ics.kypo.elasticsearch.rest.ApiEntityError;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiError;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiMicroserviceError;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -28,7 +26,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
@@ -43,7 +40,7 @@ import java.io.StringWriter;
 public class CustomRestExceptionHandlerElasticSearchService extends ResponseEntityExceptionHandler {
 
     private static final UrlPathHelper URL_PATH_HELPER = new UrlPathHelper();
-    private static Logger LOG = LoggerFactory.getLogger(CustomRestExceptionHandlerElasticSearchService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomRestExceptionHandlerElasticSearchService.class);
 
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(final TypeMismatchException ex, final HttpHeaders headers, final HttpStatus status,

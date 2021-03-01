@@ -1,7 +1,6 @@
 package cz.muni.ics.kypo.elasticsearch.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.muni.ics.kypo.elasticsearch.api.exceptions.ResourceNotFoundException;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElasticTermQueryFields;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoIndexPath;
