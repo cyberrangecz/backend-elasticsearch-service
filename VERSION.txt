@@ -1,1 +1,1 @@
-1.0.22 Handling InsufficientAuthenticationException and small refactoring.
+1.0.23 Integration of CSIRT Gitlab CI commons.
