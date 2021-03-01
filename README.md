@@ -45,8 +45,11 @@ sudo docker build --build-arg PROPRIETARY_REPO_URL={path to proprietary repo} -t
 ```
 
 e.g.:
-```bash
-sudo docker build --build-arg PROPRIETARY_REPO_URL=https://gitlab.ics.muni.cz/api/v4/projects/2358/packages/maven -t elasticsearch-service-image .
+```shell
+$ sudo docker build \
+  --build-arg PROPRIETARY_REPO_URL=https://gitlab.ics.muni.cz/api/v4/projects/2358/packages/maven \
+  -t elasticsearch-service-image \
+  .
 ```
 
 Dockefile contains several default arguments:
@@ -60,12 +63,12 @@ Those arguments can be overwritten during the build of the image, by adding the 
 
 #### 3. Start the Project
 Before you run a docker container, make sure that your ***OIDC Provider*** and [kypo2-user-and-group](https://gitlab.ics.muni.cz/muni-kypo-crp/backend-java/kypo2-user-and-group) service is running. To run a docker container, run the following command: 
-```
-sudo docker run --name {container name} --network host -it -p {port in host}:{port in container} {docker image}
-```
-e.g. with this command:
-```
-sudo docker run --name elasticsearch-service-container --network host -it -p 8085:8085 elasticsearch-service-image
+```shell
+$ sudo docker run -it \
+  --name elasticsearch-service-container \
+  --network host \
+  -p 8085:8085 \
+  elasticsearch-service-image
 ```
 
 Add the following option to use the custom property file: 
