@@ -34,7 +34,6 @@ create_tag:
   artifacts:
     paths:
       - ./pom.xml
-      - ./*/pom.xml
     expire_in: 1 hour
     when: on_success
 
