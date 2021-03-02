@@ -38,5 +38,13 @@ public abstract class AbstractKypoElasticTermQueryFields {
      */
     public static final String KYPO_ELASTICSEARCH_POOL_ID = "pool_id";
 
+    /**
+     * The constant KYPO_ELASTICSEARCH_USER_REF_ID.
+     */
+    public static final String KYPO_ELASTICSEARCH_USER_REF_ID = "user_ref_id";
 
+    /**
+     * The constant KYPO_ELASTICSEARCH_LEVEL_ID.
+     */
+    public static final String KYPO_ELASTICSEARCH_LEVEL_ID = "level";
 }

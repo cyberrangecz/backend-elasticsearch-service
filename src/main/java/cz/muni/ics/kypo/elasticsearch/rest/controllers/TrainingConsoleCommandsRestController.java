@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Api(value = "/training-platform-commands",
-        tags = "Training events",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        authorizations = @Authorization(value = "bearerAuth"))
+     tags = "Training commands",
+     consumes = MediaType.APPLICATION_JSON_VALUE,
+     authorizations = @Authorization(value = "bearerAuth"))
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Full authentication is required to access this resource.", response = ApiError.class),
