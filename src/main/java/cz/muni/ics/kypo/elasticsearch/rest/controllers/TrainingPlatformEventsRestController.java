@@ -101,6 +101,58 @@ public class TrainingPlatformEventsRestController {
     }
 
     /**
+     * Get all events in particular Training Instance and sorted by user ref id and timestamp.
+     *
+     * @param trainingInstanceId   id of wanted instance
+     * @return all events in selected Training Instance.
+     */
+    @ApiOperation(httpMethod = "GET",
+            value = "Get all events in particular training definition and training instance.",
+            nickname = "getAllEventsByTrainingDefinitionAndTrainingInstanceId",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "All events in particular training run by id was found.", responseContainer = "List"),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @GetMapping(path = "/training-instances/{instanceId}/aggregated/users/levels", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getAllEventsByTrainingDefinitionAndTrainingInstanceIdAggregated(
+            @ApiParam(value = "Training instance ID", required = true)
+            @PathVariable("instanceId") Long trainingInstanceId) {
+        try {
+            return ResponseEntity.ok(trainingEventsService.getAllEventsOfTrainingInstanceAggregatedByUsersAndLevels(trainingInstanceId));
+        } catch (ElasticsearchTrainingServiceLayerException ex) {
+            throw new ResourceNotFoundException(ex);
+        }
+    }
+
+    /**
+     * Get all events of particular Training Instance aggregated by levels and users, sorted by timestamp.
+     *
+     * @param trainingInstanceId   id of wanted instance
+     * @return all events in selected Training Instance.
+     */
+    @ApiOperation(httpMethod = "GET",
+            value = "Get all events in particular training definition and training instance.",
+            nickname = "getAllEventsByTrainingDefinitionAndTrainingInstanceId",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "All events in particular training run by id was found.", responseContainer = "List"),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @GetMapping(path = "/training-instances/{instanceId}/aggregated/levels/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getEventsOfTrainingInstanceAggregatedByLevelsAndUsers(
+            @ApiParam(value = "Training instance ID", required = true)
+            @PathVariable("instanceId") Long trainingInstanceId) {
+        try {
+            return ResponseEntity.ok(trainingEventsService.getAllEventsOfTrainingInstanceAggregatedByLevelsAndUsers(trainingInstanceId));
+        } catch (ElasticsearchTrainingServiceLayerException ex) {
+            throw new ResourceNotFoundException(ex);
+        }
+    }
+
+    /**
      * Delete all events in particular Training Run.
      *
      * @param trainingInstanceId id of instance associated with wanted run

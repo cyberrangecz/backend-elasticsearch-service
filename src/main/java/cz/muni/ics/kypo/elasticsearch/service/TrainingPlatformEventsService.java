@@ -67,6 +67,22 @@ public class TrainingPlatformEventsService {
     }
 
     /**
+     * Find all events by training definition and training instance aggregated by user and levels.
+     *
+     * @param trainingDefinitionId the training definition id
+     * @param trainingInstanceId   the training instance id
+     * @return the aggregated events by user and levels sorted by timestamp.
+     * @throws ElasticsearchTrainingServiceLayerException the elasticsearch training service layer exception
+     */
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> findAllEventsByTrainingDefinitionAndTrainingInstanceAggregated(Long trainingDefinitionId, Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
+        try {
+            return trainingPlatformEventsDAO.findAllEventsByTrainingDefinitionAndTrainingInstanceAggregated(trainingDefinitionId, trainingInstanceId);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    /**
      * Delete events by training instance id.
      *
      * @param instanceId the instance id
@@ -91,6 +107,22 @@ public class TrainingPlatformEventsService {
         try {
             trainingPlatformEventsDAO.deleteEventsFromTrainingRun(trainingInstanceId, trainingRunId);
         } catch (ElasticsearchTrainingDataLayerException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getAllEventsOfTrainingInstanceAggregatedByUsersAndLevels(Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
+        try {
+            return trainingPlatformEventsDAO.getEventsOfTrainingInstanceAggregatedByUsersAndLevels(trainingInstanceId);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getAllEventsOfTrainingInstanceAggregatedByLevelsAndUsers(Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
+        try {
+            return trainingPlatformEventsDAO.getEventsOfTrainingInstanceAggregatedByLevelsAndUsers(trainingInstanceId);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
