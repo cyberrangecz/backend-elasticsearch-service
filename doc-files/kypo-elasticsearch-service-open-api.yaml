@@ -1,11 +1,12 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 1.0.23"
+  version: "Version: 1.0.24"
   title: "KYPO2 Eleasticsearch Service - API Reference"
 host: "localhost:8080"
 basePath: "/kypo-elasticsearch-service/api/v1"
 tags:
+- name: "Training commands"
 - name: "Training events"
 schemes:
 - "http"
@@ -14,7 +15,7 @@ paths:
   /training-platform-commands/pools/{poolId}:
     get:
       tags:
-      - "Training events"
+      - "Training commands"
       summary: "Get all commands in particular pool."
       description: ""
       operationId: "findAllConsoleCommandsByPoolId"
@@ -40,7 +41,7 @@ paths:
       - bearerAuth: []
     delete:
       tags:
-      - "Training events"
+      - "Training commands"
       summary: "Delete all commands in particular pool."
       description: ""
       operationId: "deleteConsoleCommandsByPoolId"
@@ -65,7 +66,7 @@ paths:
   /training-platform-commands/sandboxes/{sandboxId}:
     get:
       tags:
-      - "Training events"
+      - "Training commands"
       summary: "Get all commands in particular sandbox."
       description: ""
       operationId: "findAllConsoleCommandsBySandboxId"
@@ -91,7 +92,7 @@ paths:
       - bearerAuth: []
     delete:
       tags:
-      - "Training events"
+      - "Training commands"
       summary: "Delete all commands in particular pool."
       description: ""
       operationId: "deleteConsoleCommandsByPoolId"
@@ -116,7 +117,7 @@ paths:
   /training-platform-commands/sandboxes/{sandboxId}/ranges:
     get:
       tags:
-      - "Training events"
+      - "Training commands"
       summary: "Get all commands in particular sandbox."
       description: ""
       operationId: "findAllConsoleCommandsBySandboxId"
@@ -246,6 +247,60 @@ paths:
         200:
           description: "All events in particular training instance by id was were\
             \ deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+  /training-platform-events/training-instances/{instanceId}/aggregated/levels/users:
+    get:
+      tags:
+      - "Training events"
+      summary: "Get all events in particular training definition and training instance."
+      description: ""
+      operationId: "getAllEventsByTrainingDefinitionAndTrainingInstanceId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "instanceId"
+        in: "path"
+        description: "Training instance ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All events in particular training run by id was found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+  /training-platform-events/training-instances/{instanceId}/aggregated/users/levels:
+    get:
+      tags:
+      - "Training events"
+      summary: "Get all events in particular training definition and training instance."
+      description: ""
+      operationId: "getAllEventsByTrainingDefinitionAndTrainingInstanceId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "instanceId"
+        in: "path"
+        description: "Training instance ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All events in particular training run by id was found."
+          schema:
+            type: "object"
         500:
           description: "Unexpected condition was encountered."
           schema:
