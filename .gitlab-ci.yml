@@ -36,11 +36,6 @@ create_tag:
     - if: '$CI_COMMIT_BRANCH == "master"'
       changes:
         - VERSION.txt
-  artifacts:
-    paths:
-      - ./pom.xml
-    expire_in: 1 hour
-    when: on_success
 
 build:
   stage: build
@@ -48,11 +43,6 @@ build:
     - mvn clean install $MAVEN_CLI_OPTS -DskipTests -Dproprietary-repo-url=$PROPRIETARY_REPO_URL
   rules:
     - if: '$CI_COMMIT_BRANCH'
-  artifacts:
-    paths:
-      - target/$PROJECT_ARTIFACT_ID-*.jar
-    expire_in: 1 hour
-    when: on_success
 
 tests:
   stage: tests
