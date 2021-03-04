@@ -1,1 +1,1 @@
-1.0.24 Integration of CSIRT Gitlab CI commons.
+1.0.25 Import microservice registration config class from security commons.
