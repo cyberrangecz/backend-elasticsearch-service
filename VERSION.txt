@@ -1,1 +1,1 @@
-1.0.25 Import microservice registration config class from security commons.
+1.0.26 Add statistics for smart-assistant visualizations.
