@@ -16,32 +16,32 @@ import org.springframework.web.bind.annotation.*;
 /**
  * The rest controller for Training platform events.
  */
-@Api(value = "/training-platform-events",
-        tags = "Training events",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        authorizations = @Authorization(value = "bearerAuth"))
+@Api(value = "/adaptive-training-platform-events",
+     tags = "Adaptive Training events",
+     consumes = MediaType.APPLICATION_JSON_VALUE,
+     authorizations = @Authorization(value = "bearerAuth"))
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Full authentication is required to access this resource.", response = ApiError.class),
         @ApiResponse(code = 403, message = "The necessary permissions are required for a resource.", response = ApiError.class)
 })
 @RestController
-@RequestMapping(path = "/training-platform-events", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TrainingPlatformEventsRestController {
+@RequestMapping(path = "/adaptive-training-platform-events", produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdaptiveTrainingPlatformEventsRestController {
 
-    private final TrainingPlatformEventsService trainingEventsService;
+    private TrainingPlatformEventsService trainingEventsService;
 
     /**
-     * Instantiates a new Training events rest controller.
+     * Instantiates a new Adaptive Training events rest controller.
      *
      * @param trainingPlatformEventsService the training events service
      */
     @Autowired
-    public TrainingPlatformEventsRestController(TrainingPlatformEventsService trainingPlatformEventsService) {
+    public AdaptiveTrainingPlatformEventsRestController(TrainingPlatformEventsService trainingPlatformEventsService) {
         this.trainingEventsService = trainingPlatformEventsService;
     }
 
     /**
-     * Get all events in particular Training Instance.
+     * Get all events in particular Adaptive Training Instance.
      *
      * @param trainingDefinitionId id of definition associated with wanted instance
      * @param trainingInstanceId   id of wanted instance
@@ -63,14 +63,14 @@ public class TrainingPlatformEventsRestController {
             @ApiParam(value = "Training instance ID", required = true)
             @PathVariable("instanceId") Long trainingInstanceId) {
         try {
-            return ResponseEntity.ok(trainingEventsService.findAllEventsByTrainingDefinitionAndTrainingInstanceId(trainingDefinitionId, trainingInstanceId, TrainingType.LINEAR));
+            return ResponseEntity.ok(trainingEventsService.findAllEventsByTrainingDefinitionAndTrainingInstanceId(trainingDefinitionId, trainingInstanceId, TrainingType.ADAPTIVE));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
     }
 
     /**
-     * Get all events in particular Training Run.
+     * Get all events in particular Adaptive Training Run.
      *
      * @param trainingDefinitionId id of definition associated with wanted run
      * @param trainingInstanceId   id of instance associated with wanted run
@@ -95,66 +95,14 @@ public class TrainingPlatformEventsRestController {
             @ApiParam(value = "Training run ID", required = true)
             @PathVariable("runId") Long trainingRunId) {
         try {
-            return ResponseEntity.ok(trainingEventsService.findAllEventsFromTrainingRun(trainingDefinitionId, trainingInstanceId, trainingRunId, TrainingType.LINEAR));
+            return ResponseEntity.ok(trainingEventsService.findAllEventsFromTrainingRun(trainingDefinitionId, trainingInstanceId, trainingRunId, TrainingType.ADAPTIVE));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
     }
 
     /**
-     * Get all events in particular Training Instance and sorted by user ref id and timestamp.
-     *
-     * @param trainingInstanceId   id of wanted instance
-     * @return all events in selected Training Instance.
-     */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get all events in particular training definition and training instance.",
-            nickname = "getAllEventsByTrainingDefinitionAndTrainingInstanceId",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "All events in particular training run by id was found.", responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
-    })
-    @GetMapping(path = "/training-instances/{instanceId}/aggregated/users/levels", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getAllEventsByTrainingDefinitionAndTrainingInstanceIdAggregated(
-            @ApiParam(value = "Training instance ID", required = true)
-            @PathVariable("instanceId") Long trainingInstanceId) {
-        try {
-            return ResponseEntity.ok(trainingEventsService.getAllEventsOfTrainingInstanceAggregatedByUsersAndLevels(trainingInstanceId));
-        } catch (ElasticsearchTrainingServiceLayerException ex) {
-            throw new ResourceNotFoundException(ex);
-        }
-    }
-
-    /**
-     * Get all events of particular Training Instance aggregated by levels and users, sorted by timestamp.
-     *
-     * @param trainingInstanceId   id of wanted instance
-     * @return all events in selected Training Instance.
-     */
-    @ApiOperation(httpMethod = "GET",
-            value = "Get all events in particular training definition and training instance.",
-            nickname = "getAllEventsByTrainingDefinitionAndTrainingInstanceId",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "All events in particular training run by id was found.", responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
-    })
-    @GetMapping(path = "/training-instances/{instanceId}/aggregated/levels/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getEventsOfTrainingInstanceAggregatedByLevelsAndUsers(
-            @ApiParam(value = "Training instance ID", required = true)
-            @PathVariable("instanceId") Long trainingInstanceId) {
-        try {
-            return ResponseEntity.ok(trainingEventsService.getAllEventsOfTrainingInstanceAggregatedByLevelsAndUsers(trainingInstanceId));
-        } catch (ElasticsearchTrainingServiceLayerException ex) {
-            throw new ResourceNotFoundException(ex);
-        }
-    }
-
-    /**
-     * Delete all events in particular Training Run.
+     * Delete all events in particular Adaptive Training Run.
      *
      * @param trainingInstanceId id of instance associated with wanted run
      * @param trainingRunId      id of wanted run
@@ -175,7 +123,7 @@ public class TrainingPlatformEventsRestController {
             @ApiParam(value = "Training run ID", required = true)
             @PathVariable("runId") Long trainingRunId) {
         try {
-            trainingEventsService.deleteEventsFromTrainingRun(trainingInstanceId, trainingRunId, TrainingType.LINEAR);
+            trainingEventsService.deleteEventsFromTrainingRun(trainingInstanceId, trainingRunId, TrainingType.ADAPTIVE);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotModifiedException(ex);
@@ -183,7 +131,7 @@ public class TrainingPlatformEventsRestController {
     }
 
     /**
-     * Delete all events in particular Training Instance.
+     * Delete all events in particular Adaptive Training Instance.
      *
      * @param trainingInstanceId id of wanted instance
      * @return Confirmation that the request process is ok.
@@ -201,7 +149,7 @@ public class TrainingPlatformEventsRestController {
             @ApiParam(value = "Training instance ID", required = true)
             @PathVariable("instanceId") Long trainingInstanceId) {
         try {
-            trainingEventsService.deleteEventsByTrainingInstanceId(trainingInstanceId, TrainingType.LINEAR);
+            trainingEventsService.deleteEventsByTrainingInstanceId(trainingInstanceId, TrainingType.ADAPTIVE);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotModifiedException(ex);

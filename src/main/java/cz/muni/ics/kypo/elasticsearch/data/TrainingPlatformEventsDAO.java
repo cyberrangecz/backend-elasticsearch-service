@@ -1,6 +1,7 @@
 package cz.muni.ics.kypo.elasticsearch.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.muni.ics.kypo.elasticsearch.data.enums.TrainingType;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElasticTermQueryFields;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoIndexPath;
@@ -13,15 +14,8 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.InnerHitBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.script.Script;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.BucketOrder;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.TopHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -63,14 +57,14 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllEventsByTrainingDefinitionAndTrainingInstanceId(Long trainingDefinitionId, Long trainingInstanceId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllEventsByTrainingDefinitionAndTrainingInstanceId(Long trainingDefinitionId, Long trainingInstanceId, TrainingType trainingType) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP, SortOrder.ASC);
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -86,14 +80,14 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllEventsFromTrainingRun(Long trainingDefinitionId, Long trainingInstanceId, Long trainingRunId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllEventsFromTrainingRun(Long trainingDefinitionId, Long trainingInstanceId, Long trainingRunId, TrainingType trainingType) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, trainingRunId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP, SortOrder.ASC);
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -250,8 +244,8 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @param trainingInstanceId the training instance id
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
-    public void deleteEventsByTrainingInstanceId(Long trainingInstanceId) throws ElasticsearchTrainingDataLayerException {
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*" + ".instance=" + trainingInstanceId + ".*");
+    public void deleteEventsByTrainingInstanceId(Long trainingInstanceId, TrainingType trainingType) throws ElasticsearchTrainingDataLayerException {
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(getEventsIndexPath(trainingType) + "*" + ".instance=" + trainingInstanceId + ".*");
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
             if (!deleteIndexResponse.isAcknowledged()) {
@@ -267,8 +261,8 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @param trainingRunId      the training run id
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
-    public void deleteEventsFromTrainingRun(Long trainingInstanceId, Long trainingRunId) throws ElasticsearchTrainingDataLayerException {
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*" + ".instance=" + trainingInstanceId + ".run=" + trainingRunId);
+    public void deleteEventsFromTrainingRun(Long trainingInstanceId, Long trainingRunId, TrainingType trainingType) throws ElasticsearchTrainingDataLayerException {
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(getEventsIndexPath(trainingType) + "*" + ".instance=" + trainingInstanceId + ".run=" + trainingRunId);
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
             if (!deleteIndexResponse.isAcknowledged()) {
@@ -389,5 +383,15 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
             throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic. Please, restart Elasticsearch service.");
         }
         return events;
+    }
+    private String getEventsIndexPath(TrainingType trainingType) {
+        switch (trainingType) {
+            case ADAPTIVE:
+                return AbstractKypoIndexPath.KYPO_ADAPTIVE_EVENTS_INDEX;
+            case LINEAR:
+                return AbstractKypoIndexPath.KYPO_EVENTS_INDEX;
+            default:
+                return null;
+        }
     }
 }
