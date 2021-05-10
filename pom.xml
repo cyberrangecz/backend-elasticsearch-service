@@ -51,8 +51,8 @@
     <dependencies>
         <dependency>
             <groupId>cz.muni.ics.kypo</groupId>
-            <artifactId>kypo2-security-commons</artifactId>
-            <version>1.0.41</version>
+            <artifactId>kypo-security-commons</artifactId>
+            <version>1.0.42</version>
         </dependency>
         <dependency>
             <groupId>cz.muni.ics.kypo</groupId>
