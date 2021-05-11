@@ -198,7 +198,7 @@
                                 </securityDefinition>
                             </securityDefinitions>
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
-                            <swaggerFileName>kypo-elasticsearch-service-open-api</swaggerFileName>
+                            <swaggerFileName>kypo-elasticsearch-service-swagger-open-api</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
                         </apiSource>
                     </apiSources>
