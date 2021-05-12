@@ -11,14 +11,23 @@ public class PythonApiError extends ApiSubError {
 
     @ApiModelProperty(value = "Detail message of the error.", example = "Sandbox could not be found.")
     private String detail;
-    @ApiModelProperty(value = "Parameters to specify details of the error.", example = "name: sandbox")
+    @ApiModelProperty(value = "Parameters to specify details of the error.", example = "name: sandbox" )
     private Map<String, String> parameters;
 
-    public PythonApiError() {
+    private PythonApiError() {
     }
 
-    public PythonApiError(String detail) {
-        this.detail = detail;
+    public static PythonApiError of(String detail) {
+        PythonApiError apiError = new PythonApiError();
+        apiError.setDetail(detail);
+        return apiError;
+    }
+
+    public static PythonApiError of(String detail, Map<String, String> parameters ) {
+        PythonApiError apiError = new PythonApiError();
+        apiError.setDetail(detail);
+        apiError.setParameters(parameters);
+        return apiError;
     }
 
     public String getDetail() {
@@ -35,6 +44,11 @@ public class PythonApiError extends ApiSubError {
 
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.detail;
     }
 
     @Override
@@ -55,7 +69,6 @@ public class PythonApiError extends ApiSubError {
     public String toString() {
         return "PythonApiError{" +
                 "detail='" + detail + '\'' +
-                ", status=" + getStatus() +
                 ", parameters=" + parameters +
                 '}';
     }

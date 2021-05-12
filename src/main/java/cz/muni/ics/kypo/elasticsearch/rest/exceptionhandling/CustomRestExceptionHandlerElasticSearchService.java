@@ -224,10 +224,10 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
      * @return the response entity
      */
     @ExceptionHandler({MicroserviceApiException.class})
-    public ResponseEntity<Object> handleUserAndGroupApiException(final MicroserviceApiException ex, final WebRequest request,
+    public ResponseEntity<Object> handleMicroserviceApiException(final MicroserviceApiException ex, final WebRequest request,
                                                                  HttpServletRequest req) {
         final ApiError apiError = ApiMicroserviceError.of(
-                HttpStatus.FORBIDDEN,
+                ex.getStatusCode(),
                 ex.getMessage(),
                 getFullStackTrace(ex),
                 URL_PATH_HELPER.getRequestUri(req),
