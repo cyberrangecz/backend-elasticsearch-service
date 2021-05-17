@@ -52,12 +52,12 @@
         <dependency>
             <groupId>cz.muni.ics.kypo</groupId>
             <artifactId>kypo-security-commons</artifactId>
-            <version>1.0.42</version>
+            <version>1.0.44</version>
         </dependency>
         <dependency>
             <groupId>cz.muni.ics.kypo</groupId>
             <artifactId>kypo-elasticsearch-documents</artifactId>
-            <version>1.0.25</version>
+            <version>1.0.26</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
