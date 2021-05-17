@@ -1,1 +1,1 @@
-1.0.26 Add statistics for smart-assistant visualizations.
+1.0.27 Update versions for es-documents and security-commons libraries.
