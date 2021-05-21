@@ -103,9 +103,9 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      *     "match_all": {}
      *   },
      *   "collapse": {
-     *     "field": "user_ref_id",
+     *     "field": "training_run_id",
      *     "inner_hits": {
-     *       "name": "by_user_ref_id",
+     *       "name": "by_training_run_id",
      *       "sort": [{"timestamp": "asc" }, {"syslog.@timestamp": "asc" }],
      *       "size": 10000
      *     }
@@ -119,18 +119,18 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getEventsOfTrainingInstanceAggregatedByUsersAndLevels(Long trainingInstanceId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getEventsOfTrainingInstanceAggregatedByRunsAndLevels(Long trainingInstanceId) throws ElasticsearchTrainingDataLayerException, IOException {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.matchAllQuery())
-                .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID, SortOrder.ASC)
+                .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, SortOrder.ASC)
                 .size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_" + AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID)
+        InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_" + AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID)
                 .setSize(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
                 .addSort(SortBuilders.fieldSort("timestamp"));
-        CollapseBuilder collapseBuilder = new CollapseBuilder(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID).setInnerHits(innerHitBuilder);
+        CollapseBuilder collapseBuilder = new CollapseBuilder(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID).setInnerHits(innerHitBuilder);
         searchSourceBuilder.collapse(collapseBuilder);
 
         SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*.instance=" + trainingInstanceId + "*");
@@ -138,7 +138,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
-        return handleAggregationOfCollapsedEventsByAnotherId(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID);
+        return handleAggregationOfCollapsedEventsByAnotherId(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID);
     }
 
     /**
@@ -167,11 +167,11 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getEventsOfTrainingInstanceAggregatedByLevelsAndUsers(Long trainingInstanceId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getEventsOfTrainingInstanceAggregatedByLevelsAndRuns(Long trainingInstanceId) throws ElasticsearchTrainingDataLayerException, IOException {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.matchAllQuery())
-                .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID, SortOrder.ASC)
+                .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, SortOrder.ASC)
                 .size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES));
 
@@ -186,7 +186,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
-        return handleAggregationOfCollapsedEventsByAnotherId(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID);
+        return handleAggregationOfCollapsedEventsByAnotherId(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID);
     }
 
     /**
