@@ -1,1 +1,1 @@
-1.0.27 Update versions for es-documents and security-commons libraries.
+1.0.28 Update versions for es-documents libraries.
