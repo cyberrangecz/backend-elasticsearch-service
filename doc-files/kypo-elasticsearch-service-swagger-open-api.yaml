@@ -384,7 +384,7 @@ paths:
             $ref: "#/definitions/ApiError"
       security:
       - bearerAuth: []
-  /training-platform-events/training-instances/{instanceId}/aggregated/levels/users:
+  /training-platform-events/training-instances/{instanceId}/aggregated/levels/training-runs:
     get:
       tags:
       - "Training events"
@@ -411,7 +411,7 @@ paths:
             $ref: "#/definitions/ApiError"
       security:
       - bearerAuth: []
-  /training-platform-events/training-instances/{instanceId}/aggregated/users/levels:
+  /training-platform-events/training-instances/{instanceId}/aggregated/training-runs/levels:
     get:
       tags:
       - "Training events"

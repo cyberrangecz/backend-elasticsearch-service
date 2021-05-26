@@ -113,17 +113,17 @@ public class TrainingPlatformEventsService {
         }
     }
 
-    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getAllEventsOfTrainingInstanceAggregatedByUsersAndLevels(Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getAllEventsOfTrainingInstanceAggregatedByRunsAndLevels(Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
         try {
-            return trainingPlatformEventsDAO.getEventsOfTrainingInstanceAggregatedByUsersAndLevels(trainingInstanceId);
+            return trainingPlatformEventsDAO.getEventsOfTrainingInstanceAggregatedByRunsAndLevels(trainingInstanceId);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getAllEventsOfTrainingInstanceAggregatedByLevelsAndUsers(Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
+    public Map<Integer, Map<Integer, List<Map<String, Object>>>> getAllEventsOfTrainingInstanceAggregatedByLevelsAndRuns(Long trainingInstanceId) throws ElasticsearchTrainingServiceLayerException {
         try {
-            return trainingPlatformEventsDAO.getEventsOfTrainingInstanceAggregatedByLevelsAndUsers(trainingInstanceId);
+            return trainingPlatformEventsDAO.getEventsOfTrainingInstanceAggregatedByLevelsAndRuns(trainingInstanceId);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
