@@ -1,1 +1,1 @@
-1.0.28 Update versions for es-documents libraries.
+1.0.29 Move from Nexus to Gitlab registry repository
