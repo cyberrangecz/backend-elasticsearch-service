@@ -18,6 +18,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
+import org.elasticsearch.search.sort.NestedSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,12 +172,13 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.matchAllQuery())
-                .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, SortOrder.ASC)
+                .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, SortOrder.ASC)
                 .size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_" + AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID)
                 .setSize(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+                .addSort(SortBuilders.fieldSort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID))
                 .addSort(SortBuilders.fieldSort("timestamp"));
         CollapseBuilder collapseBuilder = new CollapseBuilder(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID).setInnerHits(innerHitBuilder);
         searchSourceBuilder.collapse(collapseBuilder);
