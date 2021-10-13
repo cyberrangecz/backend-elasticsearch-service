@@ -1,2 +1,3 @@
+1.0.32 Bugfix: Cannot convert response from OIDC provider - new version of spring boot starter parent dependency. 
 1.0.31 Configuration of OIDC - supporting Microsoft Azure
 1.0.30 Bugfix aggregated events by level and training runs - sort inner results by training run and timestamp.
