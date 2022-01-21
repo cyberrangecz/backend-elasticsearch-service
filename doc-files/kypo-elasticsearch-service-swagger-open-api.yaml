@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   version: "Version: 1.0.33"
-  title: "KYPO2 Eleasticsearch Service - API Reference"
+  title: "KYPO Eleasticsearch Service - API Reference"
 host: "localhost:8080"
 basePath: "/kypo-elasticsearch-service/api/v1"
 tags:
@@ -670,13 +670,6 @@ paths:
             $ref: "#/definitions/ApiError"
       security:
       - bearerAuth: []
-securityDefinitions:
-  bearerAuth:
-    description: "Obtain bearer token from OIDC provider and enter the token in the\
-      \ following field. Use format 'Bearer {token}'"
-    type: "apiKey"
-    name: "Authorization"
-    in: "header"
 definitions:
   ApiEntityError:
     allOf:

@@ -13,8 +13,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -120,15 +118,6 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
 
     // Handling of own exceptions
 
-    @ExceptionHandler({InsufficientAuthenticationException.class})
-    protected ResponseEntity<Object> handleAuthenticationException(final InsufficientAuthenticationException ex, final WebRequest request, HttpServletRequest req) {
-        final ApiError apiError = ApiError.of(
-                HttpStatus.UNAUTHORIZED,
-                ex.getMessage(),
-                getFullStackTrace(ex),
-                request.getContextPath());
-        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
-    }
 
     /**
      * Handle constraint violation response entity.
@@ -141,24 +130,6 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
     public ResponseEntity<Object> handleConstraintViolation(final ConstraintViolationException ex, HttpServletRequest req) {
         final ApiError apiError = ApiError.of(
                 HttpStatus.BAD_REQUEST,
-                getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
-                URL_PATH_HELPER.getRequestUri(req));
-        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
-    }
-
-    /**
-     * Handle spring access denied exception response entity.
-     *
-     * @param ex      the ex
-     * @param request the request
-     * @param req     the req
-     * @return the response entity
-     */
-    @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<Object> handleSpringAccessDeniedException(org.springframework.security.access.AccessDeniedException ex, WebRequest request, HttpServletRequest req) {
-        final ApiError apiError = ApiError.of(
-                HttpStatus.FORBIDDEN,
                 getInitialException(ex).getLocalizedMessage(),
                 getFullStackTrace(ex),
                 URL_PATH_HELPER.getRequestUri(req));
