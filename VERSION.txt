@@ -1,4 +1,4 @@
-1.0.34 Updated dependencies to the latest versions and code cleanup. Configured multi-stage docker build to decrease the resulting image size.
+1.0.34 Updated dependencies to the latest versions. Code cleanup. Configured multi-stage docker build to decrease the resulting image size.
 1.0.33 Update log4j2 version to avoid CVE-2021-44228 vulnerability
 1.0.32 Bugfix: Cannot convert response from OIDC provider - new version of spring boot starter parent dependency. 
 1.0.31 Configuration of OIDC - supporting Microsoft Azure
