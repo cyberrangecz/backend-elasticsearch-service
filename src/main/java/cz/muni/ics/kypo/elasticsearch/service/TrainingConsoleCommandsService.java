@@ -2,6 +2,7 @@ package cz.muni.ics.kypo.elasticsearch.service;
 
 import cz.muni.ics.kypo.elasticsearch.data.TrainingConsoleCommandsDao;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
+import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoIndexPath;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,15 @@ public class TrainingConsoleCommandsService {
 
     public List<Map<String, Object>> findAllConsoleCommandsByPoolId(Long poolId) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommandsByPoolId(poolId);
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public List<Map<String, Object>> findAllConsoleCommandsByAccessToken(String accessToken) {
+        try {
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".*");
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
@@ -33,7 +42,15 @@ public class TrainingConsoleCommandsService {
 
     public List<Map<String, Object>> findAllConsoleCommandsBySandboxId(Long sandboxId) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxId(sandboxId);
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public List<Map<String, Object>> findAllConsoleCommandsByAccessTokenAndUserId(String accessToken, Long userId) {
+        try {
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".sandbox=" + userId);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
@@ -41,7 +58,15 @@ public class TrainingConsoleCommandsService {
 
     public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(Long sandboxId, Long from, Long to) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxIdAndTimeRange(sandboxId, from, to);
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxIdAndTimeRange(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId, from, to);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public List<Map<String, Object>> findAllConsoleCommandsByAccessTokenAndUserIdAndTimeRange(String accessToken, Long userId, Long from, Long to) {
+        try {
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxIdAndTimeRange(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".sandbox=" + userId, from, to);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
@@ -49,7 +74,15 @@ public class TrainingConsoleCommandsService {
 
     public void deleteConsoleCommandsByPoolId(Long poolId) {
         try {
-            trainingConsoleCommandsDao.deleteConsoleCommandsByPoolId(poolId);
+            trainingConsoleCommandsDao.deleteConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
+        } catch (ElasticsearchTrainingDataLayerException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public void deleteConsoleCommandsByAccessToken(String accessToken) {
+        try {
+            trainingConsoleCommandsDao.deleteConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".*");
         } catch (ElasticsearchTrainingDataLayerException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
@@ -57,7 +90,14 @@ public class TrainingConsoleCommandsService {
 
     public void deleteConsoleCommandsBySandboxId(Long sandboxId) {
         try {
-            trainingConsoleCommandsDao.deleteConsoleCommandsBySandboxId(sandboxId);
+            trainingConsoleCommandsDao.deleteConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
+        } catch (ElasticsearchTrainingDataLayerException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+    public void deleteConsoleCommandsByAccessTokenAndUserId(String accessToken, Long userId) {
+        try {
+            trainingConsoleCommandsDao.deleteConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".sandbox=" + userId);
         } catch (ElasticsearchTrainingDataLayerException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
