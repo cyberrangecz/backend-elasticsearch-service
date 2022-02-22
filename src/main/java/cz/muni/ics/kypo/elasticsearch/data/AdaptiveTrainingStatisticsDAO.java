@@ -433,7 +433,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public Pair<Long, Map<String, Long>> findCommandsStatisticsInTimeRange(Integer sandboxId, Long from, Long to, List<String> keywords) throws ElasticsearchTrainingDataLayerException, IOException {
+    public Pair<Long, Map<String, Long>> findCommandsStatisticsInTimeRange(String index, Long from, Long to, List<String> keywords) throws ElasticsearchTrainingDataLayerException, IOException {
         //Timestamp range query
         RangeQueryBuilder dateRangeBuilder = QueryBuilders.rangeQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR)
                 .gte(from)
@@ -451,7 +451,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
             searchSourceBuilder.aggregation(aggregation);
         }
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
+        SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
 
         return handleCommandsStatisticsResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT), keywords);

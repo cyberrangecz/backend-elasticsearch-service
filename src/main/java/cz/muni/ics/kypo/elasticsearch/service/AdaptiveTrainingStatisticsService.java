@@ -4,6 +4,7 @@ import cz.muni.ics.kypo.elasticsearch.api.dto.CommandsStatistics;
 import cz.muni.ics.kypo.elasticsearch.api.dto.OverallPhaseStatistics;
 import cz.muni.ics.kypo.elasticsearch.data.AdaptiveTrainingStatisticsDAO;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
+import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoIndexPath;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +29,39 @@ public class AdaptiveTrainingStatisticsService {
         this.adaptiveTrainingStatisticsDAO = adaptiveTrainingStatisticsDAO;
     }
 
-    public List<CommandsStatistics> findCommandsStatistic(Long trainingRunId, List<Long> phaseIds, Map<Long, List<String>> keywordsMapping) {
+    public List<CommandsStatistics> findCommandsStatistic(Long trainingRunId, List<Long> phaseIds,
+                                                          String accessToken, Long userId,
+                                                          Map<Long, List<String>> keywordsMapping) {
         try {
             List<CommandsStatistics> result = new ArrayList<>();
-            Integer sandboxId = (Integer) adaptiveTrainingStatisticsDAO.getUniqueFieldValueFromTrainingEvent(trainingRunId, "sandbox_id");
             Map<Long, Pair<Long, Long>> phasesBoundaries = adaptiveTrainingStatisticsDAO.findTimeBoundariesOfPhases(trainingRunId, phaseIds);
             Map<Long, Long> taskIdsOfPhases = adaptiveTrainingStatisticsDAO.getTaskIdsOfPhases(trainingRunId, phaseIds);
 
+            String index = getIndexToFindCommandStatistics(trainingRunId, accessToken, userId);
             for (Map.Entry<Long, Pair<Long, Long>> phaseBoundaries : phasesBoundaries.entrySet()) {
-                Pair<Long, Map<String, Long>> statistics = adaptiveTrainingStatisticsDAO.findCommandsStatisticsInTimeRange(sandboxId,
+                Pair<Long, Map<String, Long>> statistics = adaptiveTrainingStatisticsDAO.findCommandsStatisticsInTimeRange(
+                        index,
                         phaseBoundaries.getValue().getValue0(),
                         phaseBoundaries.getValue().getValue1(),
                         keywordsMapping == null ? null : keywordsMapping.get(phaseBoundaries.getKey()));
                 result.add(new CommandsStatistics(phaseBoundaries.getKey(), taskIdsOfPhases.get(phaseBoundaries.getKey()), statistics.getValue0(), statistics.getValue1()));
             }
             return result;
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    public String getIndexToFindCommandStatistics(Long trainingRunId, String accessToken, Long userId) {
+        try {
+            Integer sandboxId = (Integer) adaptiveTrainingStatisticsDAO.getUniqueFieldValueFromTrainingEvent(trainingRunId, "sandbox_id");
+            if (sandboxId != null) {
+                return AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId;
+            }
+            if (accessToken == null || userId == null) {
+                throw new ElasticsearchTrainingServiceLayerException("The sandbox ID in the training events is null, thus access token and user ID must be defined.");
+            }
+            return AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".sandbox=" + userId;
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
@@ -76,10 +95,12 @@ public class AdaptiveTrainingStatisticsService {
         }
     }
 
-    public List<OverallPhaseStatistics> findOverallStatistics(Long trainingRunId, List<Long> phaseIds, Map<Long, List<String>> keywordsMapping) {
+    public List<OverallPhaseStatistics> findOverallStatistics(Long trainingRunId, List<Long> phaseIds,
+                                                              String accessToken, Long userId,
+                                                              Map<Long, List<String>> keywordsMapping) {
         try {
             List<OverallPhaseStatistics> result = new ArrayList<>();
-            Integer sandboxId = (Integer) adaptiveTrainingStatisticsDAO.getUniqueFieldValueFromTrainingEvent(trainingRunId, "sandbox_id");
+            String index = getIndexToFindCommandStatistics(trainingRunId, accessToken, userId);
             Map<Long, Pair<Long, Long>> phasesBoundaries = adaptiveTrainingStatisticsDAO.findTimeBoundariesOfPhases(trainingRunId, phaseIds);
             Map<Long, Map<String, Long>> solutionDisplayedInPhases = adaptiveTrainingStatisticsDAO.countEventsInPhases(trainingRunId, phaseIds, List.of("SolutionDisplayed"));
             Map<Long, List<String>> wrongAnswersOfPhases = adaptiveTrainingStatisticsDAO.getWrongAnswersInPhases(trainingRunId, phaseIds);
@@ -92,7 +113,8 @@ public class AdaptiveTrainingStatisticsService {
                 overallPhaseStatistics.setSolutionDisplayed(solutionDisplayedInPhases.get(phaseId).get("SolutionDisplayed") == 1);
                 overallPhaseStatistics.setWrongAnswers(wrongAnswersOfPhases.get(phaseId));
                 overallPhaseStatistics.setTaskId(taskIdsOfPhases.get(phaseId));
-                Pair<Long, Map<String, Long>> phaseCommandsStatistics = adaptiveTrainingStatisticsDAO.findCommandsStatisticsInTimeRange(sandboxId,
+                Pair<Long, Map<String, Long>> phaseCommandsStatistics = adaptiveTrainingStatisticsDAO.findCommandsStatisticsInTimeRange(
+                        index,
                         phaseBoundary.getValue().getValue0(),
                         phaseBoundary.getValue().getValue1(),
                         keywordsMapping == null ? null : keywordsMapping.get(phaseId));

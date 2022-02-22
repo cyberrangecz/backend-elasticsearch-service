@@ -59,15 +59,14 @@ public class AdaptiveTrainingStatisticsRestController {
             @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
     })
     @PostMapping(path = "/training-runs/{runId}/phases/commands", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getCommandsStatistics(
-            @ApiParam(value = "Training run ID", required = true)
-            @PathVariable("runId") Long trainingRunId,
-            @ApiParam(value = "Phase Ids", required = true)
-            @RequestParam("phaseIds") List<Long> phaseIds,
-            @ApiParam(value = "Training run ID", required = false)
-            @RequestBody(required = false) Map<Long, List<String>> keywordsMapping) {
+    public ResponseEntity<Object> getCommandsStatisticsByTrainingRun(
+            @ApiParam(value = "Training run ID", required = true) @PathVariable("runId") Long trainingRunId,
+            @ApiParam(value = "Phase Ids") @RequestParam(name = "phaseIds", required = false) List<Long> phaseIds,
+            @ApiParam(value = "Training instance access token", required = true) @RequestParam("accessToken") String accessToken,
+            @ApiParam(value = "User ID") @RequestParam(name = "userId", required = false) Long userId,
+            @ApiParam(value = "Keywords in the individual phases") @RequestBody(required = false) Map<Long, List<String>> keywordsMapping) {
         try {
-            return ResponseEntity.ok(adaptiveTrainingStatisticsService.findCommandsStatistic(trainingRunId, phaseIds, keywordsMapping));
+            return ResponseEntity.ok(adaptiveTrainingStatisticsService.findCommandsStatistic(trainingRunId, phaseIds, accessToken, userId, keywordsMapping));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
@@ -174,14 +173,13 @@ public class AdaptiveTrainingStatisticsRestController {
     })
     @PostMapping(path = "/training-runs/{runId}/phases/overall")
     public ResponseEntity<Object> getOverallPhasesStatistics(
-            @ApiParam(value = "Training run ID", required = true)
-            @PathVariable("runId") Long trainingRunId,
-            @ApiParam(value = "Phase Ids", required = true)
-            @RequestParam("phaseIds") List<Long> phaseIds,
-            @ApiParam(value = "Training run ID", required = false)
-            @RequestBody(required = false) Map<Long, List<String>> keywordsMapping) {
+            @ApiParam(value = "Training run ID", required = true) @PathVariable("runId") Long trainingRunId,
+            @ApiParam(value = "Phase Ids", required = true) @RequestParam("phaseIds") List<Long> phaseIds,
+            @ApiParam(value = "Training instance access token", required = true) @RequestParam("accessToken") String accessToken,
+            @ApiParam(value = "User ID") @RequestParam(name = "userId", required = false) Long userId,
+            @ApiParam(value = "Keywords in the individual phases") @RequestBody(required = false) Map<Long, List<String>> keywordsMapping) {
         try {
-            return ResponseEntity.ok(adaptiveTrainingStatisticsService.findOverallStatistics(trainingRunId, phaseIds, keywordsMapping));
+            return ResponseEntity.ok(adaptiveTrainingStatisticsService.findOverallStatistics(trainingRunId, phaseIds, accessToken, userId, keywordsMapping));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotModifiedException(ex);
         }

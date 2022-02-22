@@ -52,45 +52,45 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     /**
      * Find all bash commands from a pool by its id.
      *
-     * @param poolId the pool id
+     * @param index index used to search for commands
      * @return the list
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_POOL_ID, poolId));
+        // TODO not sure if we need this
+//        searchSourceBuilder.query(QueryBuilders.termQuery(termKey, termValue));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
+        SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
     }
 
-
-    /**
-     * Find all bash commands from sandbox.
-     *
-     * @param sandboxId the sandbox id
-     * @return the list
-     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
-     * @throws IOException                             the io exception
-     */
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException, IOException {
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_SANDBOX_ID, sandboxId));
-        searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
-        searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
-
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
-        searchRequest.source(searchSourceBuilder);
-
-        return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
-    }
+//    /**
+//     * Find all bash commands from sandbox.
+//     *
+//     * @param sandboxId the sandbox id
+//     * @return the list
+//     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
+//     * @throws IOException                             the io exception
+//     */
+//    public List<Map<String, Object>> findAllConsoleCommandss(String index, String termKey, Object termValue) throws ElasticsearchTrainingDataLayerException, IOException {
+//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+//        searchSourceBuilder.query(QueryBuilders.termQuery(termKey, termValue));
+//        searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
+//        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+//        searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
+//
+//        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
+//        searchRequest.source(searchSourceBuilder);
+//
+//        return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
+//    }
 
     /**
      * Find all bash commands from sandbox aggregated by timestamp ranges.
@@ -115,9 +115,9 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(Long sandboxId, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(String index, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_SANDBOX_ID, sandboxId));
+//        searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_SANDBOX_ID, sandboxId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
@@ -128,7 +128,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
                 .lte(to);
         searchSourceBuilder.query(dateRangeBuilder);
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
+        SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
@@ -136,11 +136,11 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     }
 
     /**
-     * @param poolId the pool id
+     * @param index the pool id
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      */
-    public void deleteConsoleCommandsByPoolId(Long poolId) throws ElasticsearchTrainingDataLayerException {
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
+    public void deleteConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException {
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(index);
         try {
             AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
             if (!deleteIndexResponse.isAcknowledged()) {
@@ -151,21 +151,21 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         }
     }
 
-    /**
-     * @param sandboxId the sandbox id
-     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
-     */
-    public void deleteConsoleCommandsBySandboxId(Long sandboxId) throws ElasticsearchTrainingDataLayerException {
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
-        try {
-            AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
-            if (!deleteIndexResponse.isAcknowledged()) {
-                throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
-            }
-        } catch (IOException e) {
-            throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
-        }
-    }
+//    /**
+//     * @param sandboxId the sandbox id
+//     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
+//     */
+//    public void deleteConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException {
+//        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(index);
+//        try {
+//            AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+//            if (!deleteIndexResponse.isAcknowledged()) {
+//                throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
+//            }
+//        } catch (IOException e) {
+//            throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
+//        }
+//    }
 
     private List<Map<String, Object>> handleElasticsearchResponse(SearchResponse response) throws ElasticsearchTrainingDataLayerException {
         List<Map<String, Object>> events = new ArrayList<>();
