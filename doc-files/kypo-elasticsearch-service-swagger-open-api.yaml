@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 1.0.34"
+  version: "Version: 1.0.35"
   title: "KYPO Eleasticsearch Service - API Reference"
 host: "localhost:8085"
 basePath: "/kypo-elasticsearch-service/api/v1"
@@ -143,11 +143,172 @@ paths:
             $ref: "#/definitions/ApiError"
       security:
       - bearerAuth: []
+  /training-platform-commands/access-token/{accessToken}/users/{userId}/ranges:
+    get:
+      tags:
+      - "Training commands"
+      summary: "Get aggregated commands of training specified by access token and\
+        \ user identifier."
+      description: ""
+      operationId: "findAllConsoleCommandsByAccessTokenAndUserIdAndTimestampRange"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accessToken"
+        in: "path"
+        description: "Training instance access token"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User identifier"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "from"
+        in: "query"
+        description: "Lower bound of the time range (timestamp in epoch_millis format)\
+          \ of the the resulting console commands."
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "to"
+        in: "query"
+        description: "Upper bound of the time range (timestamp in epoch_millis format)\
+          \ of the the resulting console commands."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All training commands specified by access token and user identifier\
+            \ were found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+  /training-platform-commands/access-tokens/{accessToken}:
+    get:
+      tags:
+      - "Training commands"
+      summary: "Get all training commands specified by an access token."
+      description: ""
+      operationId: "findAllConsoleCommandsByAccessToken"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accessToken"
+        in: "path"
+        description: "Training access token."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "All commands in particular training instance were found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - "Training commands"
+      summary: "Delete all commands by access token."
+      description: ""
+      operationId: "deleteConsoleCommandsByAccessToken"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accessToken"
+        in: "path"
+        description: "Training instance access token"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "All events in particular training specified by access token\
+            \ were deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+  /training-platform-commands/access-tokens/{accessToken}/users/{userId}:
+    get:
+      tags:
+      - "Training commands"
+      summary: "Get all training commands specified by access token and user identifier."
+      description: ""
+      operationId: "findAllConsoleCommandsByAccessTokenAndUserId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accessToken"
+        in: "path"
+        description: "Training instance access token"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User identifier"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All training commands specified by access token and user identifier\
+            \ were found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - "Training commands"
+      summary: "Delete all commands by access token and user identifier."
+      description: ""
+      operationId: "deleteConsoleCommandsByAccessTokenAndUserId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accessToken"
+        in: "path"
+        description: "Training instance access token"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "path"
+        description: "User identifier"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All commands in particular training specified by access token\
+            \ and user identifier were deleted."
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
   /training-platform-commands/pools/{poolId}:
     get:
       tags:
       - "Training commands"
-      summary: "Get all commands in particular pool."
+      summary: "Get all training commands specified by an pool."
       description: ""
       operationId: "findAllConsoleCommandsByPoolId"
       produces:
@@ -161,7 +322,7 @@ paths:
         format: "int64"
       responses:
         200:
-          description: "All commands in particular pool were found."
+          description: "All training commands specified by pool ID were found."
           schema:
             type: "object"
         500:
@@ -173,7 +334,7 @@ paths:
     delete:
       tags:
       - "Training commands"
-      summary: "Delete all commands in particular pool."
+      summary: "Delete all commands by pool."
       description: ""
       operationId: "deleteConsoleCommandsByPoolId"
       produces:
@@ -198,7 +359,7 @@ paths:
     get:
       tags:
       - "Training commands"
-      summary: "Get all commands in particular sandbox."
+      summary: "Get all training commands specified by sandbox ID."
       description: ""
       operationId: "findAllConsoleCommandsBySandboxId"
       produces:
@@ -212,7 +373,7 @@ paths:
         format: "int64"
       responses:
         200:
-          description: "All commands in particular sandbox were found."
+          description: "All training commands specified by sandbox ID were found."
           schema:
             type: "object"
         500:
@@ -224,7 +385,7 @@ paths:
     delete:
       tags:
       - "Training commands"
-      summary: "Delete all commands in particular pool."
+      summary: "Delete all commands by sandbox."
       description: ""
       operationId: "deleteConsoleCommandsByPoolId"
       produces:
@@ -238,7 +399,8 @@ paths:
         format: "int64"
       responses:
         200:
-          description: "All commands in particular sandbox by id were deleted."
+          description: "All commands in particular training specified by sandbox ID\
+            \ were deleted."
         500:
           description: "Unexpected condition was encountered."
           schema:
@@ -249,9 +411,9 @@ paths:
     get:
       tags:
       - "Training commands"
-      summary: "Get all commands in particular sandbox."
+      summary: "Get aggregated commands of training specified by sandbox ID."
       description: ""
-      operationId: "findAllConsoleCommandsBySandboxId"
+      operationId: "findAllConsoleCommandsBySandboxIdAndTimestampRange"
       produces:
       - "application/json"
       parameters:
@@ -277,7 +439,7 @@ paths:
         format: "int64"
       responses:
         200:
-          description: "All commands in particular sandbox were found."
+          description: "All training commands specified by sandbox ID were found."
           schema:
             type: "object"
         500:
@@ -488,15 +650,26 @@ paths:
       - name: "phaseIds"
         in: "query"
         description: "Phase Ids"
-        required: true
+        required: false
         type: "array"
         items:
           type: "integer"
           format: "int64"
         collectionFormat: "multi"
+      - name: "accessToken"
+        in: "query"
+        description: "Training instance access token"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "query"
+        description: "User ID"
+        required: false
+        type: "integer"
+        format: "int64"
       - in: "body"
         name: "body"
-        description: "Training run ID"
+        description: "Keywords in the individual phases"
         required: false
         schema:
           type: "object"
@@ -649,9 +822,20 @@ paths:
           type: "integer"
           format: "int64"
         collectionFormat: "multi"
+      - name: "accessToken"
+        in: "query"
+        description: "Training instance access token"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "query"
+        description: "User ID"
+        required: false
+        type: "integer"
+        format: "int64"
       - in: "body"
         name: "body"
-        description: "Training run ID"
+        description: "Keywords in the individual phases"
         required: false
         schema:
           type: "object"
