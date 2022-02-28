@@ -61,7 +61,7 @@ public class AdaptiveTrainingStatisticsService {
             if (accessToken == null || userId == null) {
                 throw new ElasticsearchTrainingServiceLayerException("The sandbox ID in the training events is null, thus access token and user ID must be defined.");
             }
-            return AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + accessToken + ".sandbox=" + userId;
+            return AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".user=" + userId;
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
