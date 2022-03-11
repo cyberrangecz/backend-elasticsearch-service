@@ -15,7 +15,7 @@
     <description>KYPO Elasticsearch Service</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <proprietary-repo-id>gitlab-maven</proprietary-repo-id>
 
         <!-- spring for swagger version -->
