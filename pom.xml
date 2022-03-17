@@ -10,12 +10,12 @@
     </parent>
     <groupId>cz.muni.ics.kypo</groupId>
     <artifactId>kypo-elasticsearch-service</artifactId>
-    <version>1.0.35</version>
+    <version>2.0.0</version>
     <name>kypo-elasticsearch-service</name>
     <description>KYPO Elasticsearch Service</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <proprietary-repo-id>gitlab-maven</proprietary-repo-id>
 
         <!-- spring for swagger version -->
@@ -83,6 +83,11 @@
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb-api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.kongchen</groupId>
+            <artifactId>swagger-maven-plugin</artifactId>
+            <version>${github.kongchen.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -120,6 +125,7 @@
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
                             <swaggerFileName>kypo-elasticsearch-service-swagger-open-api</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
+                            <swaggerApiReader>cz.muni.ics.kypo.elasticsearch.utils.SnakeCaseSwaggerReader</swaggerApiReader>
                         </apiSource>
                     </apiSources>
                 </configuration>
