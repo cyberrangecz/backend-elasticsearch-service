@@ -860,7 +860,7 @@ definitions:
     - $ref: "#/definitions/ApiError"
     - type: "object"
       properties:
-        entityErrorDetail:
+        entity_error_detail:
           description: "Detail of the entity which is related to the error."
           $ref: "#/definitions/EntityErrorDetail"
       description: "A detailed error information related to the entity."
@@ -967,7 +967,7 @@ definitions:
     - $ref: "#/definitions/ApiError"
     - type: "object"
       properties:
-        apiSubError:
+        api_sub_error:
           description: "Detailed error from another microservice."
           $ref: "#/definitions/ApiSubError"
       description: "A detailed error information related to the microservice."
@@ -988,7 +988,7 @@ definitions:
         type: "string"
         example: "id"
         description: "Identifier of the entity."
-      identifierValue:
+      identifier_value:
         type: "object"
         example: "1"
         description: "Value of the identifier."
