@@ -32,6 +32,23 @@ public class TrainingPlatformEventsService {
     }
 
     /**
+     * Find all events by training definition.
+     *
+     * @param trainingDefinitionId the training definition id
+     * @return the list
+     * @throws ElasticsearchTrainingServiceLayerException the elasticsearch training service layer exception
+     */
+    public List<Map<String, Object>> findAllEventsByTrainingDefinition(Long trainingDefinitionId, TrainingType trainingType) throws ElasticsearchTrainingServiceLayerException {
+        try {
+            List<Map<String, Object>> eventsFromElasticsearch = trainingPlatformEventsDAO.findAllEventsByTrainingDefinition(trainingDefinitionId, trainingType);
+            eventsFromElasticsearch.sort(Comparator.comparing(map -> Long.valueOf(map.get("timestamp").toString())));
+            return eventsFromElasticsearch;
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    /**
      * Find all events by training definition and training instance id list.
      *
      * @param trainingDefinitionId the training definition id

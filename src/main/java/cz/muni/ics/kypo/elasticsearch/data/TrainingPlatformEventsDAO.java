@@ -49,6 +49,27 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
     }
 
     /**
+     * Find all events by training definition.
+     *
+     * @param trainingDefinitionId the training definition id
+     * @return the list
+     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
+     * @throws IOException                             the io exception
+     */
+    public List<Map<String, Object>> findAllEventsByTrainingDefinition(Long trainingDefinitionId, TrainingType trainingType) throws ElasticsearchTrainingDataLayerException, IOException {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP, SortOrder.ASC);
+        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
+
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".*");
+        searchRequest.source(searchSourceBuilder);
+
+        return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
+    }
+
+    /**
      * Find all events by training definition and training instance id list.
      *
      * @param trainingDefinitionId the training definition id

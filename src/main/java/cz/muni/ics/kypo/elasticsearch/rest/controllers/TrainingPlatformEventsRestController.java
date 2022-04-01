@@ -44,6 +44,32 @@ public class TrainingPlatformEventsRestController {
      * Get all events in particular Training Instance.
      *
      * @param trainingDefinitionId id of definition associated with wanted instance
+     * @return all events in selected Training Definition.
+     */
+    @ApiOperation(httpMethod = "GET",
+            value = "Get all events in particular training definition.",
+            nickname = "getAllEventsByTrainingDefinition",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "All events in particular training run by id was found.", responseContainer = "List"),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @GetMapping(path = "/training-definitions/{definitionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getAllEventsByTrainingDefinition(
+            @ApiParam(value = "Training definition ID", required = true)
+            @PathVariable("definitionId") Long trainingDefinitionId) {
+        try {
+            return ResponseEntity.ok(trainingEventsService.findAllEventsByTrainingDefinition(trainingDefinitionId, TrainingType.LINEAR));
+        } catch (ElasticsearchTrainingServiceLayerException ex) {
+            throw new ResourceNotFoundException(ex);
+        }
+    }
+
+    /**
+     * Get all events in particular Training Instance.
+     *
+     * @param trainingDefinitionId id of definition associated with wanted instance
      * @param trainingInstanceId   id of wanted instance
      * @return all events in selected Training Instance.
      */
