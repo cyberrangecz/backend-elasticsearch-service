@@ -71,7 +71,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * Count the number of specified events in the given phases.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
+     *  GET kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 0,
      *   "query": {
@@ -145,7 +145,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * Get all wrong answers submitted in the given phases.
      *
      * <pre>{@code
-     * GET kypo.cz.muni.csirt.kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
+     * GET kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 1000,
      *   "query": {
@@ -222,7 +222,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * Get time spent at the specified phases.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
+     *  GET kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 0,
      *   "query": {
@@ -337,7 +337,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      *
      * Elasticserach query:
      * <pre>{@code
-     * GET kypo.cz.muni.csirt.kypo.events.trainings*.run=${RUN_ID}/_search
+     * GET kypo.events.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 10,
      *   "query": {

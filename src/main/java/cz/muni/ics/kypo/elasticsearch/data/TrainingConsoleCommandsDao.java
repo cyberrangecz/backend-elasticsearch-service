@@ -3,7 +3,6 @@ package cz.muni.ics.kypo.elasticsearch.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElasticTermQueryFields;
-import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoIndexPath;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -59,8 +58,6 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      */
     public List<Map<String, Object>> findAllConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        // TODO not sure if we need this
-//        searchSourceBuilder.query(QueryBuilders.termQuery(termKey, termValue));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
@@ -70,27 +67,6 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
     }
-
-//    /**
-//     * Find all bash commands from sandbox.
-//     *
-//     * @param sandboxId the sandbox id
-//     * @return the list
-//     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
-//     * @throws IOException                             the io exception
-//     */
-//    public List<Map<String, Object>> findAllConsoleCommandss(String index, String termKey, Object termValue) throws ElasticsearchTrainingDataLayerException, IOException {
-//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-//        searchSourceBuilder.query(QueryBuilders.termQuery(termKey, termValue));
-//        searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
-//        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
-//        searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
-//
-//        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
-//        searchRequest.source(searchSourceBuilder);
-//
-//        return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
-//    }
 
     /**
      * Find all bash commands from sandbox aggregated by timestamp ranges.
@@ -108,16 +84,15 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * }
      * }
      *
-     * @param sandboxId the sandbox id
+     * @param index     index under which commands from local or cloud sandboxes are stored
      * @param from      the lower bound of the time range (epoch_millis timestamp format)
      * @param to        the upper bound of the time range (epoch_millis timestamp format)
      * @return the list of commands in given time range
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(String index, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxAndTimeRange(String index, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-//        searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_SANDBOX_ID, sandboxId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
@@ -150,22 +125,6 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
             throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
         }
     }
-
-//    /**
-//     * @param sandboxId the sandbox id
-//     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
-//     */
-//    public void deleteConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException {
-//        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(index);
-//        try {
-//            AcknowledgedResponse deleteIndexResponse = getRestHighLevelClient().indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
-//            if (!deleteIndexResponse.isAcknowledged()) {
-//                throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
-//            }
-//        } catch (IOException e) {
-//            throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic.");
-//        }
-//    }
 
     private List<Map<String, Object>> handleElasticsearchResponse(SearchResponse response) throws ElasticsearchTrainingDataLayerException {
         List<Map<String, Object>> events = new ArrayList<>();
