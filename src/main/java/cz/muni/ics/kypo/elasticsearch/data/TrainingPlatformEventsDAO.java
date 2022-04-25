@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
-    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 10_000;
+    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 30_000;
 
     /**
      * Instantiates a new Training events dao.
