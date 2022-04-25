@@ -46,7 +46,7 @@ import static cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElastic
 @Repository
 public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
 
-    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 10_000;
+    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 30_000;
     private static final int INDEX_DOCUMENTS_MIN_RETURN_NUMBER = 0;
     private static final String MAX_TIMESTAMP_SUB_AGGREGATION = "max_timestamp";
     private static final String MIN_TIMESTAMP_SUB_AGGREGATION = "min_timestamp";
