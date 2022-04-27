@@ -22,6 +22,7 @@ import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -34,7 +35,8 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
-    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 30_000;
+    @Value("${elasticsearch.max-result-window:10000}")
+    private int indexDocumentsMaxReturnNumber;
 
     /**
      * Instantiates a new Training events dao.
@@ -60,7 +62,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".*");
@@ -82,7 +84,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
@@ -105,7 +107,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, trainingRunId));
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
@@ -145,11 +147,11 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.matchAllQuery())
                 .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, SortOrder.ASC)
-                .size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+                .size(indexDocumentsMaxReturnNumber)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_" + AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID)
-                .setSize(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+                .setSize(indexDocumentsMaxReturnNumber)
                 .addSort(SortBuilders.fieldSort("timestamp"));
         CollapseBuilder collapseBuilder = new CollapseBuilder(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID).setInnerHits(innerHitBuilder);
         searchSourceBuilder.collapse(collapseBuilder);
@@ -193,11 +195,11 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.matchAllQuery())
                 .sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, SortOrder.ASC)
-                .size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+                .size(indexDocumentsMaxReturnNumber)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_" + AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID)
-                .setSize(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+                .setSize(indexDocumentsMaxReturnNumber)
                 .addSort(SortBuilders.fieldSort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID))
                 .addSort(SortBuilders.fieldSort("timestamp"));
         CollapseBuilder collapseBuilder = new CollapseBuilder(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID).setInnerHits(innerHitBuilder);
@@ -327,12 +329,12 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_USER_REF_ID, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         //Collapse query
         InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_user")
-                .setSize(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+                .setSize(indexDocumentsMaxReturnNumber)
                 .addSort(SortBuilders.fieldSort("timestamp"))
                 .addSort(SortBuilders.fieldSort("syslog.@timestamp"));
         CollapseBuilder collapseBuilder = new CollapseBuilder("user_ref_id").setInnerHits(innerHitBuilder);
