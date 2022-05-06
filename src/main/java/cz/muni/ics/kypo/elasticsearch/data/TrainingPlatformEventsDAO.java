@@ -63,7 +63,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".*");
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*.definition=" + trainingDefinitionId + ".*");
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -85,7 +85,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*.definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -108,7 +108,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*.definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + ".*");
         searchRequest.source(searchSourceBuilder);
 
         return handleElasticsearchResponse(getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT));
@@ -118,7 +118,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * Find all events by training definition and training instance id list.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.trainings*.definition={definitionId}.instance={instanceId}
+     *  GET kypo.events.trainings*.definition={definitionId}.instance={instanceId}
      *  {
      *   "query": {
      *     "match_all": {}
@@ -166,7 +166,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * Find all events by training definition and training instance id list.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.trainings*.definition={definitionId}.instance={instanceId}
+     *  GET kypo.events.trainings*.definition={definitionId}.instance={instanceId}
      *  {
      *   "query": {
      *     "match_all": {}
@@ -259,7 +259,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
     /**
      * <pre>{@code
-     *  DELETE /kypo3.cz.muni.csirt.kypo.events.trainings.*.instance={instanceId}
+     *  DELETE kypo.events.trainings.*.instance={instanceId}
      * }*
      * </pre>
      *
@@ -300,7 +300,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * Find all events by training definition and training instance id list.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.trainings*.definition={definitionId}.instance={instanceId}
+     *  GET kypo.events.trainings*.definition={definitionId}.instance={instanceId}
      *  {
      *   "query": {
      *     "match_all": {}
@@ -338,7 +338,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
         CollapseBuilder collapseBuilder = new CollapseBuilder("user_ref_id").setInnerHits(innerHitBuilder);
         searchSourceBuilder.collapse(collapseBuilder);
 
-        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*" + ".definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + "*");
+        SearchRequest searchRequest = new SearchRequest(AbstractKypoIndexPath.KYPO_EVENTS_INDEX + "*.definition=" + trainingDefinitionId + ".instance=" + trainingInstanceId + "*");
         searchRequest.source(searchSourceBuilder);
 
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
