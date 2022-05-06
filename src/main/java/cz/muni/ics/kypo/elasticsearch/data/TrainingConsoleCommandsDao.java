@@ -22,6 +22,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -34,7 +35,8 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
 
-    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 30_000;
+    @Value("${elasticsearch.max-result-window:10000}")
+    private int indexDocumentsMaxReturnNumber;
 
     /**
      * Instantiates a new Training events dao.
@@ -59,7 +61,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     public List<Map<String, Object>> findAllConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         SearchRequest searchRequest = new SearchRequest(index);
@@ -94,7 +96,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     public List<Map<String, Object>> findAllConsoleCommandsBySandboxAndTimeRange(String index, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
         //Date Range Aggregation Query
