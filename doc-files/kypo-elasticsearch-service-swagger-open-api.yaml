@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.0"
+  version: "Version: 2.0.1"
   title: "KYPO Eleasticsearch Service - API Reference"
 host: "localhost:8085"
 basePath: "/kypo-elasticsearch-service/api/v1"
@@ -440,6 +440,33 @@ paths:
       responses:
         200:
           description: "All training commands specified by sandbox ID were found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+  /training-platform-events/training-definitions/{definitionId}:
+    get:
+      tags:
+      - "Training events"
+      summary: "Get all events in particular training definition."
+      description: ""
+      operationId: "getAllEventsByTrainingDefinition"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "definitionId"
+        in: "path"
+        description: "Training definition ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "All events in particular training run by id was found."
           schema:
             type: "object"
         500:
