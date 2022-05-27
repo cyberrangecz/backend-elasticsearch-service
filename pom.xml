@@ -83,6 +83,11 @@
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb-api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.kongchen</groupId>
+            <artifactId>swagger-maven-plugin</artifactId>
+            <version>${github.kongchen.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -120,6 +125,7 @@
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
                             <swaggerFileName>kypo-elasticsearch-service-swagger-open-api</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
+                            <swaggerApiReader>cz.muni.ics.kypo.elasticsearch.utils.SnakeCaseSwaggerReader</swaggerApiReader>
                         </apiSource>
                     </apiSources>
                 </configuration>

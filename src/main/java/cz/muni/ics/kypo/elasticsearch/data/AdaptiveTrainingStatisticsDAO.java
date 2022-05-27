@@ -30,8 +30,10 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +48,6 @@ import static cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElastic
 @Repository
 public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
 
-    private static final int INDEX_DOCUMENTS_MAX_RETURN_NUMBER = 10_000;
     private static final int INDEX_DOCUMENTS_MIN_RETURN_NUMBER = 0;
     private static final String MAX_TIMESTAMP_SUB_AGGREGATION = "max_timestamp";
     private static final String MIN_TIMESTAMP_SUB_AGGREGATION = "min_timestamp";
@@ -54,6 +55,9 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
     private static final String KEYWORD_FILTER_SUB_AGGREGATION = "keyword_filter";
     private static final String PHASES_AGGREGATION = "phases_aggregation";
     private static final String PHASES_COLLAPSE = "phases_collapse";
+
+    @Value("${elasticsearch.max-result-window:10000}")
+    private int indexDocumentsMaxReturnNumber;
 
     /**
      * Instantiates a new Adaptive Training Statistics dao.
@@ -71,7 +75,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * Count the number of specified events in the given phases.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
+     *  GET kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 0,
      *   "query": {
@@ -145,7 +149,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * Get all wrong answers submitted in the given phases.
      *
      * <pre>{@code
-     * GET kypo.cz.muni.csirt.kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
+     * GET kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 1000,
      *   "query": {
@@ -176,7 +180,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
     public Map<Long, List<String>> getWrongAnswersInPhases(Long trainingRunId, List<Long> phaseIds) throws ElasticsearchTrainingDataLayerException, IOException {
         //Phases collapse builder query
         InnerHitBuilder innerHitBuilder = new InnerHitBuilder(PHASES_COLLAPSE)
-                .setSize(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+                .setSize(indexDocumentsMaxReturnNumber);
         CollapseBuilder collapseBuilder = new CollapseBuilder(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_PHASE_ID)
                 .setInnerHits(innerHitBuilder);
 
@@ -185,7 +189,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
                 .must(includeOnlyWrongAnswers());
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES))
                 .query(boolQueryBuilder)
                 .collapse(collapseBuilder);
@@ -222,7 +226,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      * Get time spent at the specified phases.
      *
      * <pre>{@code
-     *  GET kypo.cz.muni.csirt.kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
+     *  GET kypo.events.adaptive.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 0,
      *   "query": {
@@ -337,7 +341,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      *
      * Elasticserach query:
      * <pre>{@code
-     * GET kypo.cz.muni.csirt.kypo.events.trainings*.run=${RUN_ID}/_search
+     * GET kypo.events.trainings*.run=${RUN_ID}/_search
      * {
      *   "size": 10,
      *   "query": {
@@ -371,7 +375,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
                 .must(includeOnlySpecifiedPhases(phaseIds))
                 .filter(QueryBuilders.wildcardQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseStarted"));
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER)
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(indexDocumentsMaxReturnNumber)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES))
                 .query(boolQueryBuilder);
         searchRequest.source(searchSourceBuilder);
@@ -441,7 +445,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
-        searchSourceBuilder.size(INDEX_DOCUMENTS_MAX_RETURN_NUMBER);
+        searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
         searchSourceBuilder.query(dateRangeBuilder);
 
