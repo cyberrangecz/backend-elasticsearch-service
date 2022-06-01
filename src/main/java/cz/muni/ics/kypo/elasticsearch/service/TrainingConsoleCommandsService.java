@@ -24,49 +24,49 @@ public class TrainingConsoleCommandsService {
         this.trainingConsoleCommandsDao = trainingConsoleCommandsDao;
     }
 
-    public List<Map<String, Object>> findAllConsoleCommandsByPoolId(Long poolId) {
+    public List<Map<String, Object>> findAllConsoleCommandsByPoolId(Long poolId, List<String> filterCommands) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*");
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".pool=" + poolId + ".*", filterCommands);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public List<Map<String, Object>> findAllConsoleCommandsByAccessToken(String accessToken) {
+    public List<Map<String, Object>> findAllConsoleCommandsByAccessToken(String accessToken, List<String> filterCommands) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".*");
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".*", filterCommands);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxId(Long sandboxId) {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxId(Long sandboxId, List<String> filterCommands) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId);
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId, filterCommands);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public List<Map<String, Object>> findAllConsoleCommandsByAccessTokenAndUserId(String accessToken, Long userId) {
+    public List<Map<String, Object>> findAllConsoleCommandsByAccessTokenAndUserId(String accessToken, Long userId, List<String> filterCommands) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".user=" + userId);
+            return trainingConsoleCommandsDao.findAllConsoleCommands(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".user=" + userId, filterCommands);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(Long sandboxId, Long from, Long to) {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxIdAndTimeRange(Long sandboxId, Long from, Long to, List<String> filterCommands) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxAndTimeRange(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId, from, to);
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxAndTimeRange(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId, from, to, filterCommands);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
     }
 
-    public List<Map<String, Object>> findAllConsoleCommandsByAccessTokenAndUserIdAndTimeRange(String accessToken, Long userId, Long from, Long to) {
+    public List<Map<String, Object>> findAllConsoleCommandsByAccessTokenAndUserIdAndTimeRange(String accessToken, Long userId, Long from, Long to, List<String> filterCommands) {
         try {
-            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxAndTimeRange(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".user=" + userId, from, to);
+            return trainingConsoleCommandsDao.findAllConsoleCommandsBySandboxAndTimeRange(AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".access-token=" + accessToken + ".user=" + userId, from, to, filterCommands);
         } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
             throw new ElasticsearchTrainingServiceLayerException(ex);
         }
