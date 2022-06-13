@@ -8,7 +8,6 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.recycler.Recycler;
 import org.elasticsearch.core.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.InnerHitBuilder;
@@ -244,6 +243,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
      *           ]
      *         }
      *       }
+     *      ]
      *   },
      *   "aggs": {
      *     "phases_agg": {
@@ -374,7 +374,7 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
                 .must(includeOnlySpecifiedPhases(phaseIds))
-                .filter(QueryBuilders.wildcardQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseStarted"));
+                .filter(QueryBuilders.wildcardQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseStarted").caseInsensitive(true));
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(indexDocumentsMaxReturnNumber)
                 .timeout(new TimeValue(5, TimeUnit.MINUTES))
                 .query(boolQueryBuilder);
@@ -492,21 +492,21 @@ public class AdaptiveTrainingStatisticsDAO extends AbstractElasticClientDAO {
 
     private BoolQueryBuilder includeOnlyPhaseStartedAndCompleted() {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.should(QueryBuilders.wildcardQuery(KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseStarted"));
-        boolQueryBuilder.should(QueryBuilders.wildcardQuery(KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseCompleted"));
+        boolQueryBuilder.should(QueryBuilders.wildcardQuery(KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseStarted").caseInsensitive(true));
+        boolQueryBuilder.should(QueryBuilders.wildcardQuery(KYPO_ELASTICSEARCH_EVENT_TYPE, "*PhaseCompleted").caseInsensitive(true));
         return boolQueryBuilder;
     }
 
     private BoolQueryBuilder includeOnlyWrongAnswers() {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.should(QueryBuilders.wildcardQuery(KYPO_ELASTICSEARCH_EVENT_TYPE, "*WrongAnswerSubmitted"));
+        boolQueryBuilder.should(QueryBuilders.wildcardQuery(KYPO_ELASTICSEARCH_EVENT_TYPE, "*WrongAnswerSubmitted").caseInsensitive(true));
         return boolQueryBuilder;
     }
 
     private FiltersAggregator.KeyedFilter[] createWildcardQueryFilters(String fieldName, List<String> fieldValues) {
         FiltersAggregator.KeyedFilter[] filterArray = new FiltersAggregator.KeyedFilter[fieldValues.size()];
         for (int i = 0; i < fieldValues.size(); i++) {
-            filterArray[i] = new FiltersAggregator.KeyedFilter(fieldValues.get(i), QueryBuilders.wildcardQuery(fieldName, "*" + fieldValues.get(i) + "*"));
+            filterArray[i] = new FiltersAggregator.KeyedFilter(fieldValues.get(i), QueryBuilders.wildcardQuery(fieldName, "*" + fieldValues.get(i) + "*").caseInsensitive(true));
         }
         return filterArray;
     }
