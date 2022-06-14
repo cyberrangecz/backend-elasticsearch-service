@@ -1,3 +1,4 @@
+2.0.2 Bump version of the rest highg client to prevent warnings, added parameter case insensitive to wildcard queries.
 2.0.1 Modify configuration of the swagger docs generation, parametrize max result window, removed event types from indices.
 2.0.0 Migrate project to Java 17.
 1.0.35 Support to request commands from the local sandboxes by access token and user ID.
