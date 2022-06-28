@@ -72,4 +72,9 @@ public abstract class AbstractKypoElasticTermQueryFields {
      */
     public static final String KYPO_ELASTICSEARCH_ACCESS_TOKEN = "access_token";
 
+    /**
+     * The constant KYPO_ELASTICSEARCH_COMMAND.
+     */
+    public static final String KYPO_ELASTICSEARCH_COMMAND = "cmd";
+
 }
