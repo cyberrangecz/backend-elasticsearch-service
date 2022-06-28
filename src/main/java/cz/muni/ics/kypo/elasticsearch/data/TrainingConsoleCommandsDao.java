@@ -10,8 +10,11 @@ import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.core.TimeValue;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.RegexpQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregations;
@@ -24,12 +27,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -58,11 +64,14 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommands(String index) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommands(String index, List<String> filterCommands) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
+        if(!filterCommands.isEmpty()) {
+            searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
+        }
 
         SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
@@ -93,17 +102,22 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxAndTimeRange(String index, Long from, Long to) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxAndTimeRange(String index, Long from, Long to, List<String> filterCommands) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
 
-        //Date Range Aggregation Query
-        RangeQueryBuilder dateRangeBuilder = QueryBuilders.rangeQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR)
+        //Compound queries - Date Range Aggregation Query + Regexp Query
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        List<QueryBuilder> boolMustQueries = boolQueryBuilder.must();
+        boolMustQueries.add(QueryBuilders.rangeQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR)
                 .gte(from)
-                .lte(to);
-        searchSourceBuilder.query(dateRangeBuilder);
+                .lte(to));
+        if(!filterCommands.isEmpty()) {
+            boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
 
         SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
