@@ -46,7 +46,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.BAD_REQUEST,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 request.getContextPath());
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -57,7 +57,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.BAD_REQUEST,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 request.getContextPath());
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -68,7 +68,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.BAD_REQUEST,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 request.getContextPath());
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -79,7 +79,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.NOT_FOUND,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 request.getContextPath());
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -131,7 +131,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.BAD_REQUEST,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 URL_PATH_HELPER.getRequestUri(req));
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -141,7 +141,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.NOT_FOUND,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 URL_PATH_HELPER.getRequestUri(req));
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -160,7 +160,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.NOT_ACCEPTABLE,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 URL_PATH_HELPER.getRequestUri(req));
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -178,7 +178,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.BAD_REQUEST,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 URL_PATH_HELPER.getRequestUri(req));
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -200,7 +200,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiMicroserviceError.of(
                 ex.getStatusCode(),
                 ex.getMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 URL_PATH_HELPER.getRequestUri(req),
                 ex.getApiSubError());
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
@@ -219,7 +219,7 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
         final ApiError apiError = ApiError.of(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 getInitialException(ex).getLocalizedMessage(),
-                getFullStackTrace(ex),
+                getErrorMessage(ex),
                 URL_PATH_HELPER.getRequestUri(req));
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -240,6 +240,18 @@ public class CustomRestExceptionHandlerElasticSearchService extends ResponseEnti
             return fullStackTrace;
         } catch (IOException e) {
             LOG.error("It was not possible to get the stack trace for that exception: ", e);
+        }
+        return "It was not possible to get the stack trace for that exception.";
+    }
+
+    private String getErrorMessage(Exception exception) {
+        try (StringWriter sw = new StringWriter();
+             PrintWriter pw = new PrintWriter(sw)) {
+            exception.printStackTrace(pw);
+            LOG.error(sw.toString());
+            return exception.getMessage();
+        } catch (IOException ex) {
+            LOG.error("It was not possible to get the stack trace for that exception: ", ex);
         }
         return "It was not possible to get the stack trace for that exception.";
     }
