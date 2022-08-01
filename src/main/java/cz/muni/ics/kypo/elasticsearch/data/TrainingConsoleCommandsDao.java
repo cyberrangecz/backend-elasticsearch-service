@@ -76,7 +76,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
             searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
         }
         if (commandType != null) {
-            boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandType.toString()));
+            searchSourceBuilder.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandType.toString()));
         }
 
         SearchRequest searchRequest = new SearchRequest(index);
