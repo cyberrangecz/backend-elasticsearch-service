@@ -77,7 +77,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         }
         if (commandType != null) {
             String commandTypeString = commandType.toString() + "-command";
-            searchSourceBuilder.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandTypeString));
+            searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandTypeString));
         }
 
         SearchRequest searchRequest = new SearchRequest(index);
