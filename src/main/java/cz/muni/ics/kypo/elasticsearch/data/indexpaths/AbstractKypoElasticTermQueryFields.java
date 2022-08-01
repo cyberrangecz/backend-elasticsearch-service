@@ -58,6 +58,10 @@ public abstract class AbstractKypoElasticTermQueryFields {
      */
     public static final String KYPO_ELASTICSEARCH_EVENT_TYPE = "type";
     /**
+     * The constant KYPO_ELASTICSEARCH_COMMAND_TYPE.
+     */
+    public static final String KYPO_ELASTICSEARCH_COMMAND_TYPE = "cmd_type";
+    /**
      * The constant KYPO_ELASTICSEARCH_ANSWER_CONTENT.
      */
     public static final String KYPO_ELASTICSEARCH_ANSWER_CONTENT = "answer_content";
