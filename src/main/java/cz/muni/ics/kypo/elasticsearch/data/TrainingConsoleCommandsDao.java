@@ -1,6 +1,7 @@
 package cz.muni.ics.kypo.elasticsearch.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.muni.ics.kypo.elasticsearch.data.enums.CommandType;
 import cz.muni.ics.kypo.elasticsearch.data.exceptions.ElasticsearchTrainingDataLayerException;
 import cz.muni.ics.kypo.elasticsearch.data.indexpaths.AbstractKypoElasticTermQueryFields;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -59,18 +60,23 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
     /**
      * Find all bash commands from a pool by its id.
      *
-     * @param index index used to search for commands
+     * @param index             index used to search for commands
+     * @param filterCommands    list of commands to filter
+     * @param commandType       type of filtered commands
      * @return the list
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommands(String index, List<String> filterCommands) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommands(String index, List<String> filterCommands, CommandType commandType) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
-        if(!filterCommands.isEmpty()) {
+        if(filterCommands != null && !filterCommands.isEmpty()) {
             searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
+        }
+        if (commandType != null) {
+            boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandType.toString()));
         }
 
         SearchRequest searchRequest = new SearchRequest(index);
@@ -98,11 +104,13 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
      * @param index     index under which commands from local or cloud sandboxes are stored
      * @param from      the lower bound of the time range (epoch_millis timestamp format)
      * @param to        the upper bound of the time range (epoch_millis timestamp format)
+     * @param filterCommands list of commands to filter
+     * @param commandType type of filtered commands
      * @return the list of commands in given time range
      * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
      * @throws IOException                             the io exception
      */
-    public List<Map<String, Object>> findAllConsoleCommandsBySandboxAndTimeRange(String index, Long from, Long to, List<String> filterCommands) throws ElasticsearchTrainingDataLayerException, IOException {
+    public List<Map<String, Object>> findAllConsoleCommandsBySandboxAndTimeRange(String index, Long from, Long to, List<String> filterCommands, CommandType commandType) throws ElasticsearchTrainingDataLayerException, IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
@@ -114,9 +122,13 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         boolMustQueries.add(QueryBuilders.rangeQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR)
                 .gte(from)
                 .lte(to));
-        if(!filterCommands.isEmpty()) {
+        if(filterCommands != null && !filterCommands.isEmpty()) {
             boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
         }
+        if (commandType != null) {
+            boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandType.toString()));
+        }
+        
         searchSourceBuilder.query(boolQueryBuilder);
 
         SearchRequest searchRequest = new SearchRequest(index);
