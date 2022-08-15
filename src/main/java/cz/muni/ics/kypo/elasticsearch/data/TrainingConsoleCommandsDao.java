@@ -76,7 +76,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
             searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
         }
         if (commandType != null) {
-            String commandTypeString = commandType.toString() + "-command";
+            String commandTypeString = commandType.toString().toLowerCase() + "-command";
             searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandTypeString));
         }
 
@@ -127,7 +127,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
             boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
         }
         if (commandType != null) {
-            String commandTypeString = commandType.toString() + "-command";
+            String commandTypeString = commandType.toString().toLowerCase() + "-command";
             boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND_TYPE, commandTypeString));
         }
         
