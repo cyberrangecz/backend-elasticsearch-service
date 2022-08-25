@@ -69,7 +69,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         searchSourceBuilder.sort(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR, SortOrder.ASC);
         searchSourceBuilder.size(indexDocumentsMaxReturnNumber);
         searchSourceBuilder.timeout(new TimeValue(5, TimeUnit.MINUTES));
-        if(!filterCommands.isEmpty()) {
+        if(filterCommands != null && !filterCommands.isEmpty()) {
             searchSourceBuilder.query(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
         }
 
@@ -114,7 +114,7 @@ public class TrainingConsoleCommandsDao extends AbstractElasticClientDAO {
         boolMustQueries.add(QueryBuilders.rangeQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TIMESTAMP_STR)
                 .gte(from)
                 .lte(to));
-        if(!filterCommands.isEmpty()) {
+        if(filterCommands != null && !filterCommands.isEmpty()) {
             boolMustQueries.add(QueryBuilders.regexpQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_COMMAND, StringUtils.collectionToDelimitedString(filterCommands, "|")));
         }
         searchSourceBuilder.query(boolQueryBuilder);
