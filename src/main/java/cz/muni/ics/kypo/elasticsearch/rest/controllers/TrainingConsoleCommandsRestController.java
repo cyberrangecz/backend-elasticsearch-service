@@ -52,7 +52,8 @@ public class TrainingConsoleCommandsRestController {
     @GetMapping(path = "/pools/{poolId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsByPoolId(
             @ApiParam(value = "Training pool ID", required = true) @PathVariable("poolId") Long poolId,
-            @ApiParam(value = "List of command to filter", required = true) @RequestParam List<String> commands) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByPoolId(poolId, commands));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -79,7 +80,8 @@ public class TrainingConsoleCommandsRestController {
     @GetMapping(path = "/access-tokens/{accessToken}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsByAccessToken(
             @ApiParam(value = "Training access token.", required = true) @PathVariable("accessToken") String accessToken,
-            @ApiParam(value = "List of command to filter", required = true) @RequestParam List<String> commands) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByAccessToken(accessToken, commands));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -105,7 +107,8 @@ public class TrainingConsoleCommandsRestController {
     @GetMapping(path = "/sandboxes/{sandboxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsBySandboxId(
             @ApiParam(value = "Training sandbox ID", required = true) @PathVariable("sandboxId") Long sandboxId,
-            @ApiParam(value = "List of command to filter", required = true) @RequestParam List<String> commands) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxId(sandboxId, commands));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -133,7 +136,8 @@ public class TrainingConsoleCommandsRestController {
     public ResponseEntity<Object> findAllConsoleCommandsByAccessTokenAndUserId(
             @ApiParam(value = "Training instance access token", required = true) @PathVariable("accessToken") String accessToken,
             @ApiParam(value = "User identifier", required = true) @PathVariable("userId") Long userId,
-            @ApiParam(value = "List of command to filter", required = true) @RequestParam List<String> commands) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByAccessTokenAndUserId(accessToken, userId, commands));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -165,7 +169,8 @@ public class TrainingConsoleCommandsRestController {
             @RequestParam(value = "from") Long from,
             @ApiParam(value = "Upper bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
             @RequestParam(value = "to") Long to,
-            @ApiParam(value = "List of command to filter", required = true) @RequestParam List<String> commands) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxIdAndTimeRange(sandboxId, from, to, commands));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -199,7 +204,8 @@ public class TrainingConsoleCommandsRestController {
             @RequestParam(value = "from") Long from,
             @ApiParam(value = "Upper bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
             @RequestParam(value = "to") Long to,
-            @ApiParam(value = "List of command to filter", required = true) @RequestParam List<String> commands) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByAccessTokenAndUserIdAndTimeRange(accessToken, userId, from, to, commands));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
