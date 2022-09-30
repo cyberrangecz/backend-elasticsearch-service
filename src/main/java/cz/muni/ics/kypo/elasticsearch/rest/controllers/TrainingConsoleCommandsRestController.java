@@ -106,7 +106,7 @@ public class TrainingConsoleCommandsRestController {
     })
     @GetMapping(path = "/sandboxes/{sandboxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsBySandboxId(
-            @ApiParam(value = "Training sandbox ID", required = true) @PathVariable("sandboxId") Long sandboxId,
+            @ApiParam(value = "Training sandbox ID", required = true) @PathVariable("sandboxId") String sandboxId,
             @ApiParam(value = "List of command to filter", required = false)
             @RequestParam(value = "commands", required = false) List<String> commands) {
         try {
@@ -164,7 +164,7 @@ public class TrainingConsoleCommandsRestController {
     })
     @GetMapping(path = "/sandboxes/{sandboxId}/ranges", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsBySandboxIdAndTimestampRange(
-            @ApiParam(value = "Training sandbox ID", required = true) @PathVariable("sandboxId") Long sandboxId,
+            @ApiParam(value = "Training sandbox ID", required = true) @PathVariable("sandboxId") String sandboxId,
             @ApiParam(value = "Lower bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
             @RequestParam(value = "from") Long from,
             @ApiParam(value = "Upper bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
@@ -280,7 +280,7 @@ public class TrainingConsoleCommandsRestController {
     @DeleteMapping(path = "/sandboxes/{sandboxId}")
     public ResponseEntity<Void> deleteConsoleCommandsBySandboxId(
             @ApiParam(value = "Training sandbox ID", required = true)
-            @PathVariable("sandboxId") Long sandboxId) {
+            @PathVariable("sandboxId") String sandboxId) {
         try {
             trainingConsoleCommandsService.deleteConsoleCommandsBySandboxId(sandboxId);
             return new ResponseEntity<>(HttpStatus.OK);
