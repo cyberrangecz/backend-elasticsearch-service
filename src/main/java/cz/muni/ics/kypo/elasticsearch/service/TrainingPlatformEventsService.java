@@ -86,6 +86,24 @@ public class TrainingPlatformEventsService {
     }
 
     /**
+     * Find all events from training run list by levelId
+     *
+     * @param trainingInstanceId   the training instance id
+     * @param levelId  the level id
+     * @param collapseField the field used to collapse data
+     * @param trainingType type of the training (linear or adaptive)
+     * @return the map of the events aggregated by given field
+     * @throws ElasticsearchTrainingServiceLayerException the elasticsearch training service layer exception
+     */
+    public Map<Object, List<Map<String, Object>>> findAllEventsFromTrainingRunByLevelId(Long trainingInstanceId, Long levelId, String collapseField, TrainingType trainingType) throws ElasticsearchTrainingServiceLayerException {
+        try {
+            return trainingPlatformEventsDAO.findEventsByInstanceAndLevelAggregatedByGivenField(trainingInstanceId, levelId, collapseField, trainingType);
+        } catch (ElasticsearchTrainingDataLayerException | IOException ex) {
+            throw new ElasticsearchTrainingServiceLayerException(ex);
+        }
+    }
+
+    /**
      * Find all events by training definition and training instance aggregated by user and levels.
      *
      * @param trainingDefinitionId the training definition id

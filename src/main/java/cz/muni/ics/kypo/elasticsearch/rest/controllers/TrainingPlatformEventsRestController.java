@@ -128,9 +128,38 @@ public class TrainingPlatformEventsRestController {
     }
 
     /**
+     * Get all events in particular Training Run.
+     *
+     * @param instanceId   id of instance associated with wanted run
+     * @param levelId id of the level
+     * @param aggregationField name of the field used to aggregate data
+     * @return all events in selected Training Run.
+     */
+    @ApiOperation(httpMethod = "GET",
+            value = "Get all events in particular training run.",
+            nickname = "getEventsOfTrainingInstanceAndLevelAggregatedByGivenField",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "All events in particular training run by id was found.", responseContainer = "List"),
+            @ApiResponse(code = 500, message = "Unexpected condition was encountered.", response = ApiError.class)
+    })
+    @GetMapping(path = "/training-instances/{instanceId}/levels/{levelId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getEventsOfTrainingInstanceAndLevelAggregatedByGivenField(
+            @ApiParam(value = "Training instance ID", required = true) @PathVariable Long instanceId,
+            @ApiParam(value = "Training level ID", required = true) @PathVariable Long levelId,
+            @ApiParam(value = "Field used to aggregate data", required = true) @RequestParam("aggregationField") String aggregationField) {
+        try {
+            return ResponseEntity.ok(trainingEventsService.findAllEventsFromTrainingRunByLevelId(instanceId, levelId, aggregationField, TrainingType.LINEAR));
+        } catch (ElasticsearchTrainingServiceLayerException ex) {
+            throw new ResourceNotFoundException(ex);
+        }
+    }
+
+    /**
      * Get all events in particular Training Instance and sorted by user ref id and timestamp.
      *
-     * @param trainingInstanceId   id of wanted instance
+     * @param trainingInstanceId id of wanted instance
      * @return all events in selected Training Instance.
      */
     @ApiOperation(httpMethod = "GET",
@@ -156,7 +185,7 @@ public class TrainingPlatformEventsRestController {
     /**
      * Get all events of particular Training Instance aggregated by levels and training runs, sorted by timestamp.
      *
-     * @param trainingInstanceId   id of wanted instance
+     * @param trainingInstanceId id of wanted instance
      * @return all events in selected Training Instance.
      */
     @ApiOperation(httpMethod = "GET",
