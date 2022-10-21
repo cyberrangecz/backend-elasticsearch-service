@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.0.2"
+  version: "Version: 2.1.0"
   title: "KYPO Eleasticsearch Service - API Reference"
 host: "localhost:8085"
 basePath: "/kypo-elasticsearch-service/api/v1"
@@ -179,6 +179,14 @@ paths:
         required: true
         type: "integer"
         format: "int64"
+      - name: "commands"
+        in: "query"
+        description: "List of command to filter"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       responses:
         200:
           description: "All training commands specified by access token and user identifier\
@@ -206,6 +214,14 @@ paths:
         description: "Training access token."
         required: true
         type: "string"
+      - name: "commands"
+        in: "query"
+        description: "List of command to filter"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       responses:
         200:
           description: "All commands in particular training instance were found."
@@ -262,6 +278,14 @@ paths:
         required: true
         type: "integer"
         format: "int64"
+      - name: "commands"
+        in: "query"
+        description: "List of command to filter"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       responses:
         200:
           description: "All training commands specified by access token and user identifier\
@@ -320,6 +344,14 @@ paths:
         required: true
         type: "integer"
         format: "int64"
+      - name: "commands"
+        in: "query"
+        description: "List of command to filter"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       responses:
         200:
           description: "All training commands specified by pool ID were found."
@@ -371,6 +403,14 @@ paths:
         required: true
         type: "integer"
         format: "int64"
+      - name: "commands"
+        in: "query"
+        description: "List of command to filter"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       responses:
         200:
           description: "All training commands specified by sandbox ID were found."
@@ -437,6 +477,14 @@ paths:
         required: true
         type: "integer"
         format: "int64"
+      - name: "commands"
+        in: "query"
+        description: "List of command to filter"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       responses:
         200:
           description: "All training commands specified by sandbox ID were found."

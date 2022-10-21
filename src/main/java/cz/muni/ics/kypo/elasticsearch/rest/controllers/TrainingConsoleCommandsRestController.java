@@ -6,7 +6,6 @@ import cz.muni.ics.kypo.elasticsearch.data.enums.CommandType;
 import cz.muni.ics.kypo.elasticsearch.rest.ApiError;
 import cz.muni.ics.kypo.elasticsearch.service.TrainingConsoleCommandsService;
 import cz.muni.ics.kypo.elasticsearch.service.exceptions.ElasticsearchTrainingServiceLayerException;
-
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Api(value = "/training-platform-commands",
-     tags = "Training commands",
-     consumes = MediaType.APPLICATION_JSON_VALUE,
-     authorizations = @Authorization(value = "bearerAuth"))
+        tags = "Training commands",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        authorizations = @Authorization(value = "bearerAuth"))
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Full authentication is required to access this resource.", response = ApiError.class),
@@ -39,9 +38,7 @@ public class TrainingConsoleCommandsRestController {
     /**
      * Get all training commands specified by an pool ID.
      *
-     * @param poolId        id of the pool
-     * @param commands      list of commands to filter
-     * @param commandType   type of filtered commands
+     * @param poolId id of the pool
      * @return all commands executed in the training.
      */
     @ApiOperation(httpMethod = "GET",
@@ -56,8 +53,10 @@ public class TrainingConsoleCommandsRestController {
     @GetMapping(path = "/pools/{poolId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsByPoolId(
             @ApiParam(value = "Training pool ID", required = true) @PathVariable("poolId") Long poolId,
-            @ApiParam(value = "List of command to filter", required = false) @RequestParam List<String> commands,
-            @ApiParam(value = "Command type", required = false) @RequestParam CommandType commandType) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands,
+            @ApiParam(value = "Command type", required = false)
+            @RequestParam CommandType commandType) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByPoolId(poolId, commands, commandType));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -69,9 +68,7 @@ public class TrainingConsoleCommandsRestController {
     /**
      * Get all training commands specified by an access token.
      *
-     * @param accessToken   access token of the training instance
-     * @param commands      list of commands to filter
-     * @param commandType   type of filtered commands
+     * @param accessToken access token of the training instance
      * @return all commands executed in the training.
      */
     @ApiOperation(httpMethod = "GET",
@@ -86,8 +83,10 @@ public class TrainingConsoleCommandsRestController {
     @GetMapping(path = "/access-tokens/{accessToken}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsByAccessToken(
             @ApiParam(value = "Training access token.", required = true) @PathVariable("accessToken") String accessToken,
-            @ApiParam(value = "List of command to filter", required = false) @RequestParam List<String> commands,
-            @ApiParam(value = "Command type", required = false) @RequestParam CommandType commandType) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands,
+            @ApiParam(value = "Command type", required = false)
+            @RequestParam CommandType commandType) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByAccessToken(accessToken, commands, commandType));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -98,9 +97,7 @@ public class TrainingConsoleCommandsRestController {
     /**
      * Get all commands in particular sandbox.
      *
-     * @param sandboxId     id of wanted sandbox
-     * @param commands      list of commands to filter
-     * @param commandType   type of filtered commands
+     * @param sandboxId id of wanted sandbox
      * @return all commands in selected sandbox.
      */
     @ApiOperation(httpMethod = "GET",
@@ -115,8 +112,10 @@ public class TrainingConsoleCommandsRestController {
     @GetMapping(path = "/sandboxes/{sandboxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findAllConsoleCommandsBySandboxId(
             @ApiParam(value = "Training sandbox ID", required = true) @PathVariable("sandboxId") Long sandboxId,
-            @ApiParam(value = "List of command to filter", required = false) @RequestParam List<String> commands,
-            @ApiParam(value = "Command type", required = false) @RequestParam CommandType commandType) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands,
+            @ApiParam(value = "Command type", required = false)
+            @RequestParam CommandType commandType) {
         try {
             return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxId(sandboxId, commands, commandType));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
@@ -127,10 +126,8 @@ public class TrainingConsoleCommandsRestController {
     /**
      * Get all training commands specified by an access token and user identifier.
      *
-     * @param accessToken   access token of the training instance
-     * @param userId        identifier of the user
-     * @param commands      list of commands to filter
-     * @param commandType   type of filtered commands
+     * @param accessToken access token of the training instance
+     * @param userId identifier of the user
      * @return all commands executed during training.
      */
     @ApiOperation(httpMethod = "GET",
@@ -146,10 +143,13 @@ public class TrainingConsoleCommandsRestController {
     public ResponseEntity<Object> findAllConsoleCommandsByAccessTokenAndUserId(
             @ApiParam(value = "Training instance access token", required = true) @PathVariable("accessToken") String accessToken,
             @ApiParam(value = "User identifier", required = true) @PathVariable("userId") Long userId,
-            @ApiParam(value = "List of command to filter", required = false) @RequestParam List<String> commands,
-            @ApiParam(value = "Command type", required = false) @RequestParam CommandType commandType) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands,
+            @ApiParam(value = "Command type", required = false)
+            @RequestParam CommandType commandType) {
         try {
-            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByAccessTokenAndUserId(accessToken, userId, commands, commandType));
+            return ResponseEntity.ok(trainingConsoleCommandsService
+                    .findAllConsoleCommandsByAccessTokenAndUserId(accessToken, userId, commands, commandType));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
@@ -158,11 +158,9 @@ public class TrainingConsoleCommandsRestController {
     /**
      * Get all commands aggregated by timestamp ranges of training specified by sandbox ID.
      *
-     * @param sandboxId     id of wanted sandbox
-     * @param from          the lower bound of the time range
-     * @param to            the upper bound of the time range
-     * @param commands      list of commands to filter
-     * @param commandType   type of filtered commands
+     * @param sandboxId id of wanted sandbox
+     * @param from      the lower bound of the time range
+     * @param to        the upper bound of the time range
      * @return all commands in selected sandbox.
      */
     @ApiOperation(httpMethod = "GET",
@@ -181,10 +179,13 @@ public class TrainingConsoleCommandsRestController {
             @RequestParam(value = "from") Long from,
             @ApiParam(value = "Upper bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
             @RequestParam(value = "to") Long to,
-            @ApiParam(value = "List of command to filter", required = false) @RequestParam List<String> commands,
-            @ApiParam(value = "Command type", required = false) @RequestParam CommandType commandType) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands,
+            @ApiParam(value = "Command type", required = false)
+            @RequestParam CommandType commandType) {
         try {
-            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsBySandboxIdAndTimeRange(sandboxId, from, to, commands, commandType));
+            return ResponseEntity.ok(trainingConsoleCommandsService
+                    .findAllConsoleCommandsBySandboxIdAndTimeRange(sandboxId, from, to, commands, commandType));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
@@ -193,12 +194,10 @@ public class TrainingConsoleCommandsRestController {
     /**
      * Get all commands aggregated by timestamp ranges of training specified by access token and user identifier.
      *
-     * @param accessToken   access token of the training instance
-     * @param userId        identifier of the user
-     * @param from          the lower bound of the time range
-     * @param to            the upper bound of the time range
-     * @param commands      list of commands to filter
-     * @param commandType   type of filtered commands
+     * @param accessToken access token of the training instance
+     * @param userId identifier of the user
+     * @param from      the lower bound of the time range
+     * @param to        the upper bound of the time range
      * @return all commands in selected sandbox.
      */
     @ApiOperation(httpMethod = "GET",
@@ -218,10 +217,13 @@ public class TrainingConsoleCommandsRestController {
             @RequestParam(value = "from") Long from,
             @ApiParam(value = "Upper bound of the time range (timestamp in epoch_millis format) of the the resulting console commands.", required = true)
             @RequestParam(value = "to") Long to,
-            @ApiParam(value = "List of command to filter", required = false) @RequestParam List<String> commands,
-            @ApiParam(value = "Command type", required = false) @RequestParam CommandType commandType) {
+            @ApiParam(value = "List of command to filter", required = false)
+            @RequestParam(value = "commands", required = false) List<String> commands,
+            @ApiParam(value = "Command type", required = false)
+            @RequestParam CommandType commandType) {
         try {
-            return ResponseEntity.ok(trainingConsoleCommandsService.findAllConsoleCommandsByAccessTokenAndUserIdAndTimeRange(accessToken, userId, from, to, commands, commandType));
+            return ResponseEntity.ok(trainingConsoleCommandsService
+                    .findAllConsoleCommandsByAccessTokenAndUserIdAndTimeRange(accessToken, userId, from, to, commands, commandType));
         } catch (ElasticsearchTrainingServiceLayerException ex) {
             throw new ResourceNotFoundException(ex);
         }
