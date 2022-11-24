@@ -1,3 +1,4 @@
+22.12-rc.1 Changed sandboxId type to string.
 2.1.0 Added option to filter commands retrieved from elasticsearch, removed stacktrace from errors.
 2.0.2 Bump version of the rest high client to prevent warnings, added parameter case insensitive to wildcard queries.
 2.0.1 Modify configuration of the swagger docs generation, parametrize max result window, removed event types from indices.
