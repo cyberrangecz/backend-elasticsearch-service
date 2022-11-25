@@ -117,6 +117,37 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
     }
 
     /**
+     * Find all events from training run list.
+     *
+     * @param trainingInstanceId   the training instance id
+     * @param levelId  the level id
+     * @param collapseField the field used to collapse data
+     * @param trainingType type of the training (linear or adaptive)
+     * @return the list
+     * @throws ElasticsearchTrainingDataLayerException the elasticsearch training data layer exception
+     * @throws IOException                             the io exception
+     */
+    public Map<Object, List<Map<String, Object>>> findEventsByInstanceAndLevelAggregatedByGivenField(Long trainingInstanceId, Long levelId, String collapseField, TrainingType trainingType) throws ElasticsearchTrainingDataLayerException, IOException {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(QueryBuilders.matchQuery(AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, levelId))
+                .size(indexDocumentsMaxReturnNumber)
+                .timeout(new TimeValue(5, TimeUnit.MINUTES));
+
+        InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setName("by_" + collapseField)
+                .setSize(indexDocumentsMaxReturnNumber)
+                .addSort(SortBuilders.fieldSort("timestamp"));
+        CollapseBuilder collapseBuilder = new CollapseBuilder(collapseField).setInnerHits(innerHitBuilder);
+        searchSourceBuilder.collapse(collapseBuilder);
+
+        SearchRequest searchRequest = new SearchRequest(getEventsIndexPath(trainingType) + "*.instance=" + trainingInstanceId + "*");
+        searchRequest.source(searchSourceBuilder);
+
+        SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
+        return handleAggregatedEvents(searchResponse, collapseField);
+    }
+
+
+    /**
      * Find all events by training definition and training instance id list.
      *
      * <pre>{@code
@@ -161,7 +192,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
-        return handleAggregationOfCollapsedEventsByAnotherId(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID);
+        return handleAggregatedEvents(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID);
     }
 
     /**
@@ -210,7 +241,7 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
 
         SearchResponse searchResponse = getRestHighLevelClient().search(searchRequest, RequestOptions.DEFAULT);
 
-        return handleAggregationOfCollapsedEventsByAnotherId(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID);
+        return handleAggregatedEvents(searchResponse, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_LEVEL_ID, AbstractKypoElasticTermQueryFields.KYPO_ELASTICSEARCH_TRAINING_RUN_ID);
     }
 
     /**
@@ -218,23 +249,43 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @param searchResponse Elasticsearch response.
      * @return events aggregated by user.
      */
-    private Map<Integer, Map<Integer, List<Map<String, Object>>>> handleAggregationOfCollapsedEventsByAnotherId(SearchResponse searchResponse, String collapseIdField, String anotherIdField) throws ElasticsearchTrainingDataLayerException, IOException {
-        Map<Integer, Map<Integer, List<Map<String, Object>>>> aggregatedEventsByFirstFieldVar = new HashMap<>();
+    private Map<Integer, Map<Integer, List<Map<String, Object>>>> handleAggregatedEvents(
+            SearchResponse searchResponse, String firstLevelAggregationField, String secondLevelAggregationField) throws ElasticsearchTrainingDataLayerException, IOException {
+        Map<Integer, Map<Integer, List<Map<String, Object>>>> aggregatedEvents = new HashMap<>();
 
         if (searchResponse != null) {
             SearchHits responseHits = searchResponse.getHits();
             if (responseHits != null) {
                 SearchHit[] collapsedResults = responseHits.getHits();
                 for (SearchHit hit : collapsedResults) {
-                    Integer firstFieldValue = hit.getFields().get(collapseIdField).getValue();
-                    SearchHits innerHitsByFirstField = hit.getInnerHits().get("by_" + collapseIdField);
-                    aggregatedEventsByFirstFieldVar.put(firstFieldValue, aggregateEventsByField(innerHitsByFirstField, anotherIdField));
+                    Integer firstFieldValue = hit.getFields().get(firstLevelAggregationField).getValue();
+                    SearchHits innerHitsByFirstField = hit.getInnerHits().get("by_" + firstLevelAggregationField);
+                    aggregatedEvents.put(firstFieldValue, aggregateEventsBySecondLevelField(innerHitsByFirstField, secondLevelAggregationField));
                 }
             }
         } else {
             throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic. Please, restart Elasticsearch service.");
         }
-        return aggregatedEventsByFirstFieldVar;
+        return aggregatedEvents;
+    }
+
+    private Map<Object, List<Map<String, Object>>> handleAggregatedEvents(SearchResponse searchResponse, String aggregationField) throws ElasticsearchTrainingDataLayerException, IOException {
+        Map<Object, List<Map<String, Object>>> aggregatedEventsByField = new HashMap<>();
+
+        if (searchResponse != null) {
+            SearchHits responseHits = searchResponse.getHits();
+            if (responseHits != null) {
+                SearchHit[] collapsedResults = responseHits.getHits();
+                for (SearchHit hit : collapsedResults) {
+                    Object firstFieldValue = hit.getFields().get(aggregationField).getValue();
+                    SearchHits innerHitsByFirstField = hit.getInnerHits().get("by_" + aggregationField);
+                    aggregatedEventsByField.put(firstFieldValue, extractDataFromSearchHits(innerHitsByFirstField.getHits()));
+                }
+            }
+        } else {
+            throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic. Please, restart Elasticsearch service.");
+        }
+        return aggregatedEventsByField;
     }
 
     /**
@@ -242,15 +293,15 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
      * @param unprocessedEvents list of SearchHits that represents events of the particular user sorted by timestamp.
      * @return events aggregated by level.
      */
-    private Map<Integer, List<Map<String, Object>>> aggregateEventsByField(SearchHits unprocessedEvents, String aggregationField) {
+    private Map<Integer, List<Map<String, Object>>> aggregateEventsBySecondLevelField(SearchHits unprocessedEvents, String secondLevelAggregationField) {
         Map<Integer, List<Map<String, Object>>> aggregatedEvents = new LinkedHashMap<>();
         List<Map<String, Object>> eventsOfField = new ArrayList<>();
-        Integer fieldValue = (Integer) unprocessedEvents.getAt(0).getSourceAsMap().get(aggregationField);
+        Integer fieldValue = (Integer) unprocessedEvents.getAt(0).getSourceAsMap().get(secondLevelAggregationField);
 
         for (SearchHit unprocessedEvent: unprocessedEvents) {
-            if(!fieldValue.equals(unprocessedEvent.getSourceAsMap().get(aggregationField))) {
+            if(!fieldValue.equals(unprocessedEvent.getSourceAsMap().get(secondLevelAggregationField))) {
                 aggregatedEvents.put(fieldValue, eventsOfField);
-                fieldValue = (Integer) unprocessedEvent.getSourceAsMap().get(aggregationField);
+                fieldValue = (Integer) unprocessedEvent.getSourceAsMap().get(secondLevelAggregationField);
                 eventsOfField = new ArrayList<>();
             }
             eventsOfField.add(unprocessedEvent.getSourceAsMap());
@@ -393,21 +444,23 @@ public class TrainingPlatformEventsDAO extends AbstractElasticClientDAO {
     }
 
     private List<Map<String, Object>> handleElasticsearchResponse(SearchResponse response) throws ElasticsearchTrainingDataLayerException {
-        List<Map<String, Object>> events = new ArrayList<>();
         if (response != null) {
             SearchHits responseHits = response.getHits();
-            if (responseHits != null) {
-                SearchHit[] results = responseHits.getHits();
-                for (SearchHit hit : results) {
-                    Map<String, Object> source = hit.getSourceAsMap();
-                    events.add(source);
-                }
-            }
+            return responseHits != null ? extractDataFromSearchHits(responseHits.getHits()) : new ArrayList<>();
         } else {
             throw new ElasticsearchTrainingDataLayerException("Client could not connect to Elastic. Please, restart Elasticsearch service.");
         }
+    }
+
+    private List<Map<String, Object>> extractDataFromSearchHits(SearchHit[] hits) {
+        List<Map<String, Object>> events = new ArrayList<>();
+        for (SearchHit hit : hits) {
+            Map<String, Object> source = hit.getSourceAsMap();
+            events.add(source);
+        }
         return events;
     }
+
     private String getEventsIndexPath(TrainingType trainingType) {
         switch (trainingType) {
             case ADAPTIVE:

@@ -54,7 +54,7 @@ public class AdaptiveTrainingStatisticsService {
 
     public String getIndexToFindCommandStatistics(Long trainingRunId, String accessToken, Long userId) {
         try {
-            Integer sandboxId = (Integer) adaptiveTrainingStatisticsDAO.getUniqueFieldValueFromTrainingEvent(trainingRunId, "sandbox_id");
+            String sandboxId = (String) adaptiveTrainingStatisticsDAO.getUniqueFieldValueFromTrainingEvent(trainingRunId, "sandbox_id");
             if (sandboxId != null) {
                 return AbstractKypoIndexPath.KYPO_CONSOLE_COMMANDS_INDEX + "*" + ".sandbox=" + sandboxId;
             }
