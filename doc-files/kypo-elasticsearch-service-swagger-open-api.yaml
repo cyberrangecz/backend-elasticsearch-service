@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 2.1.0"
+  version: "Version: 22.12-rc.1"
   title: "KYPO Eleasticsearch Service - API Reference"
 host: "localhost:8085"
 basePath: "/kypo-elasticsearch-service/api/v1"
@@ -401,8 +401,7 @@ paths:
         in: "path"
         description: "Training sandbox ID"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       - name: "commands"
         in: "query"
         description: "List of command to filter"
@@ -435,8 +434,7 @@ paths:
         in: "path"
         description: "Training sandbox ID"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       responses:
         200:
           description: "All commands in particular training specified by sandbox ID\
@@ -461,8 +459,7 @@ paths:
         in: "path"
         description: "Training sandbox ID"
         required: true
-        type: "integer"
-        format: "int64"
+        type: "string"
       - name: "from"
         in: "query"
         description: "Lower bound of the time range (timestamp in epoch_millis format)\
@@ -664,6 +661,44 @@ paths:
         required: true
         type: "integer"
         format: "int64"
+      responses:
+        200:
+          description: "All events in particular training run by id was found."
+          schema:
+            type: "object"
+        500:
+          description: "Unexpected condition was encountered."
+          schema:
+            $ref: "#/definitions/ApiError"
+      security:
+      - bearerAuth: []
+  /training-platform-events/training-instances/{instanceId}/levels/{levelId}:
+    get:
+      tags:
+      - "Training events"
+      summary: "Get all events in particular training run."
+      description: ""
+      operationId: "getEventsOfTrainingInstanceAndLevelAggregatedByGivenField"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "instanceId"
+        in: "path"
+        description: "Training instance ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "levelId"
+        in: "path"
+        description: "Training level ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "aggregationField"
+        in: "query"
+        description: "Field used to aggregate data"
+        required: true
+        type: "string"
       responses:
         200:
           description: "All events in particular training run by id was found."
