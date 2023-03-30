@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  version: "Version: 22.12-rc.1"
+  version: "Version: 2.1.1"
   title: "KYPO Eleasticsearch Service - API Reference"
 host: "localhost:8085"
 basePath: "/kypo-elasticsearch-service/api/v1"
@@ -187,6 +187,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "commandType"
+        in: "query"
+        description: "Command type"
+        required: false
+        type: "string"
+        enum:
+        - "BASH"
+        - "MSF"
       responses:
         200:
           description: "All training commands specified by access token and user identifier\
@@ -222,6 +230,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "commandType"
+        in: "query"
+        description: "Command type"
+        required: false
+        type: "string"
+        enum:
+        - "BASH"
+        - "MSF"
       responses:
         200:
           description: "All commands in particular training instance were found."
@@ -286,6 +302,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "commandType"
+        in: "query"
+        description: "Command type"
+        required: false
+        type: "string"
+        enum:
+        - "BASH"
+        - "MSF"
       responses:
         200:
           description: "All training commands specified by access token and user identifier\
@@ -352,6 +376,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "commandType"
+        in: "query"
+        description: "Command type"
+        required: false
+        type: "string"
+        enum:
+        - "BASH"
+        - "MSF"
       responses:
         200:
           description: "All training commands specified by pool ID were found."
@@ -410,6 +442,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "commandType"
+        in: "query"
+        description: "Command type"
+        required: false
+        type: "string"
+        enum:
+        - "BASH"
+        - "MSF"
       responses:
         200:
           description: "All training commands specified by sandbox ID were found."
@@ -482,6 +522,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "commandType"
+        in: "query"
+        description: "Command type"
+        required: false
+        type: "string"
+        enum:
+        - "BASH"
+        - "MSF"
       responses:
         200:
           description: "All training commands specified by sandbox ID were found."
