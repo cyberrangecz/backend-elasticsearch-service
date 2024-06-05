@@ -110,7 +110,13 @@ public class AdaptiveTrainingStatisticsService {
                 OverallPhaseStatistics overallPhaseStatistics = new OverallPhaseStatistics();
                 overallPhaseStatistics.setPhaseId(phaseId);
                 overallPhaseStatistics.setPhaseTime(phaseBoundary.getValue().getValue1() - phaseBoundary.getValue().getValue0());
-                overallPhaseStatistics.setSolutionDisplayed(solutionDisplayedInPhases.get(phaseId).get("SolutionDisplayed") == 1);
+                Map<String, Long> phaseMap = solutionDisplayedInPhases.get(phaseId);
+                if (phaseMap != null && phaseMap.get("SolutionDisplayed") != null) {
+                    overallPhaseStatistics.setSolutionDisplayed(phaseMap.get("SolutionDisplayed") == 1);
+                } else {
+                    overallPhaseStatistics.setSolutionDisplayed(false);
+                }
+
                 overallPhaseStatistics.setWrongAnswers(wrongAnswersOfPhases.get(phaseId));
                 overallPhaseStatistics.setTaskId(taskIdsOfPhases.get(phaseId));
                 Pair<Long, Map<String, Long>> phaseCommandsStatistics = adaptiveTrainingStatisticsDAO.findCommandsStatisticsInTimeRange(

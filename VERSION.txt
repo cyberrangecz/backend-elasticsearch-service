@@ -1,3 +1,4 @@
+2.1.2 Fix error causing disabled level transition.
 2.1.1 Updated command filtering with optional command type parameter.
 22.12-rc.1 Changed sandboxId type to string.
 2.1.0 Added option to filter commands retrieved from elasticsearch, removed stacktrace from errors.
