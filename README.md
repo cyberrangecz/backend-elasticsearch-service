@@ -1,4 +1,4 @@
-# KYPO Elasticsearch Service
+# CyberRange Platform Elasticsearch Service
 This project represents the back-end service for retrieving Elasticsearch documents.
 
 ## Content
@@ -29,14 +29,14 @@ This project is divided into several directories:
 #### Prerequisities
 Install the following technology:
 
-Technology        | URL to Download
------------------ | ------------
-Docker            | https://docs.docker.com/install/
+| Technology | URL to Download                  |
+|------------|----------------------------------|
+| Docker     | https://docs.docker.com/install/ |
 
 #### 1. Preparation of Configuration Files
 To build and run the project in docker it is necessary to prepare several configurations:
-* Set the [OpenID Connect configuration](https://docs.crp.kypo.muni.cz/installation-guide/setting-up-oidc-provider/).
-* Fill OIDC credentials gained from the previous step and set additional settings in the [kypo-elasticsearch-service.properties](https://gitlab.ics.muni.cz/muni-kypo-crp/backend-java/kypo-elasticsearch-service/-/blob/master/etc/kypo-elasticsearch-service.properties) file and save it.
+* Set the [OpenID Connect configuration](https://docs.platform.cyberrange.cz/installation-guide/setting-up-oidc-provider/).
+* Fill OIDC credentials gained from the previous step and set additional settings in the [elasticsearch-service.properties](https://github.com/cyberrangecz/backend-elasticsearch-service/blob/master/etc/elasticsearch-service.properties) file and save it.
 
 #### 2. Build Docker Image
 The root folder of the project contains a Dockerfile with commands to assemble a docker image.  To build an image run the following command:
@@ -53,7 +53,7 @@ $ sudo docker build \
 ```
 
 Dockefile contains several default arguments:
-* PROJECT_ARTIFACT_ID=kypo-elasticsearch-service - the name of the project artifact.
+* PROJECT_ARTIFACT_ID=elasticsearch-service - the name of the project artifact.
 * PROPRIETARY_REPO_URL=YOUR-PATH-TO-PROPRIETARY_REPO.
 
 Those arguments can be overwritten during the build of the image, by adding the following option for each argument: 
@@ -62,7 +62,7 @@ Those arguments can be overwritten during the build of the image, by adding the 
 ``` 
 
 #### 3. Start the Project
-Before you run a docker container, make sure that your ***OIDC Provider*** and [kypo2-user-and-group](https://gitlab.ics.muni.cz/muni-kypo-crp/backend-java/kypo2-user-and-group) service is running. To run a docker container, run the following command: 
+Before you run a docker container, make sure that your ***OIDC Provider*** and [user-and-group](https://github.com/cyberrangecz/backend-user-and-group) service is running. To run a docker container, run the following command: 
 ```shell
 $ sudo docker run -it \
   --name elasticsearch-service-container \
@@ -73,5 +73,5 @@ $ sudo docker run -it \
 
 Add the following option to use the custom property file: 
 ```
--v {path to your config file}:/app/etc/kypo-elasticsearch-service.properties
+-v {path to your config file}:/app/etc/elasticsearch-service.properties
 ```
