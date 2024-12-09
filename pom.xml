@@ -117,13 +117,13 @@
                             </locations>
                             <schemes>http,https</schemes>
                             <host>${swagger.host}</host>
-                            <basePath>/kypo-elasticsearch-service/api/v1</basePath>
+                            <basePath>/elasticsearch-service/api/v1</basePath>
                             <info>
-                                <title>KYPO Eleasticsearch Service - API Reference</title>
+                                <title>Eleasticsearch Service - API Reference</title>
                                 <version>Version: ${project.version}</version>
                             </info>
                             <swaggerDirectory>${swagger.directory}</swaggerDirectory>
-                            <swaggerFileName>kypo-elasticsearch-service-swagger-open-api</swaggerFileName>
+                            <swaggerFileName>elasticsearch-service-swagger-open-api</swaggerFileName>
                             <outputFormats>yaml</outputFormats>
                             <swaggerApiReader>cz.muni.ics.kypo.elasticsearch.utils.SnakeCaseSwaggerReader</swaggerApiReader>
                         </apiSource>
