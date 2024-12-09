@@ -8,15 +8,14 @@
         <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>cz.muni.ics.kypo</groupId>
-    <artifactId>kypo-elasticsearch-service</artifactId>
+    <groupId>cyberrangecz</groupId>
+    <artifactId>elasticsearch-service</artifactId>
     <version>2.1.2</version>
-    <name>kypo-elasticsearch-service</name>
-    <description>KYPO Elasticsearch Service</description>
+    <name>elasticsearch-service</name>
+    <description>Elasticsearch Service</description>
 
     <properties>
         <java.version>17</java.version>
-        <proprietary-repo-id>gitlab-maven</proprietary-repo-id>
 
         <!-- spring for swagger version -->
         <swagger.version>3.0.0</swagger.version>
