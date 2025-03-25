@@ -7,7 +7,14 @@
     <artifactId>elasticsearch-service</artifactId>
     <name>CyberRangeCZ Elasticsearch Service</name>
     <description>Backend service for communication with Elasticsearch</description>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/cyberrangecz/backend-elasticsearch-service/blob/master/LICENSE</url>
+        </license>
+    </licenses>
     
     <parent>
         <groupId>org.springframework.boot</groupId>
