@@ -3,11 +3,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cz.cyberrange.platform</groupId>
+    <groupId>cz.cybersecurityhub.maven</groupId>
     <artifactId>elasticsearch-service</artifactId>
     <name>CyberRangeCZ Elasticsearch Service</name>
     <description>Backend service for communication with Elasticsearch</description>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
+
+    <url>https://github.com/cyberrangecz/backend-elasticsearch-service</url>
+    <scm>
+        <url>https://github.com/cyberrangecz/backend-elasticsearch-service</url>
+        <connection>scm:git:https://github.com/cyberrangecz/backend-elasticsearch-service.git</connection>
+        <developerConnection>scm:git:git@github.com:cyberrangecz/backend-elasticsearch-service.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Mário Murín</name>
+            <email>murin@cshub.cz</email>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
@@ -41,13 +56,6 @@
         <!-- added to avoid log4j2 vulnerability CVE-2021-44228 -->
         <log4j2.version>2.15.0</log4j2.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>${proprietary-repo-id}</id>
-            <url>${proprietary-repo-url}</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!--SPRING BOOT STARTERS-->
