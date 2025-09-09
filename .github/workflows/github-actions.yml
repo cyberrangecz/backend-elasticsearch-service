@@ -1,4 +1,4 @@
-name: Training feedback CI
+name: Elasticsearch service CI
 
 on:
   push:
