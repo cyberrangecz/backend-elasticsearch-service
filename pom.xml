@@ -7,7 +7,7 @@
     <artifactId>elasticsearch-service</artifactId>
     <name>CyberRangeCZ Elasticsearch Service</name>
     <description>Backend service for communication with Elasticsearch</description>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <url>https://github.com/cyberrangecz/backend-elasticsearch-service</url>
     <scm>
@@ -195,6 +195,8 @@
                 <!-- later need to set score -->
                 <failBuildOnCVSS>11</failBuildOnCVSS>
                 <nvdApiKey>${env.NVD_API_TOKEN}</nvdApiKey>
+                <dataDirectory>${env.NVD_DATA_DIR}</dataDirectory>
+                <ossIndexServerId>ossindex</ossIndexServerId>
             </configuration>
             <executions>
                 <execution>
