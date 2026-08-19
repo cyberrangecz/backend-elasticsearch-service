@@ -1,4 +1,7 @@
 # CyberRangeCZ Platform Elasticsearch Service
+
+> **Archived.** This repository is archived and no longer maintained. Elasticsearch has been replaced by OpenSearch in the CyberRangeCZ Platform, and this service's functionality was moved into [backend-training](https://github.com/cyberrangecz/backend-training)'s `training-opensearch` module. The code below is kept for historical reference only.
+
 This project represents the back-end service for retrieving Elasticsearch documents.
 
 ## Content
